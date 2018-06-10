@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    android:padding="@dimen/standard_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/EditorCategory"
+            android:text="@string/supplier" />
+
+        <EditText
+            android:id="@+id/supplier_name"
+            style="@style/EditorInserts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="@string/dummy_name"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/EditorCategory"
+            android:text="@string/address" />
+
+        <EditText
+            android:id="@+id/supplier_address"
+            style="@style/EditorInserts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="@string/dummy_address"
+            android:inputType="textMultiLine"
+            android:lines="2"
+            android:maxLines="3"
+            android:minLines="2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/EditorCategory"
+            android:text="@string/phone" />
+
+        <EditText
+            android:id="@+id/supplier_phone"
+            style="@style/EditorInserts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="@string/phone_format"
+            android:inputType="phone" />
+    </LinearLayout>
+</LinearLayout>
