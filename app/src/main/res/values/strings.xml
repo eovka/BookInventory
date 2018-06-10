@@ -3,7 +3,8 @@
     <string name="add_book">Add a book</string>
     <string name="add_supplier">Add a supplier</string>
     <string name="save">Save</string>
-    <string name="insert_example">Insert an example book</string>
+    <string name="insert_dummy_book">+ dummy book</string>
+    <string name="insert_dummy_supplier">+ dummy supplier</string>
     <string name="delete_books">Delete all books</string>
     <string name="warning_title">Are you sure?</string>
     <string name="warning_message">Delete all books from the catalog?</string>

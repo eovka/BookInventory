@@ -7,9 +7,11 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import pl.pisze_czytam.bookinventory.data.BookContract.*;
+
 public class BooksEditor extends AppCompatActivity {
     private Spinner suppliersSpinner;
-//    private String defaultSupplier =
+    private String defaultSupplier = BookEntry.SUPPLIER_UNKNOWN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,7 @@ public class BooksEditor extends AppCompatActivity {
 //
 //            @Override
 //            public void onNothingSelected(AdapterView<?> parent) {
-//       // TODO: set the default value
+//                defaultSupplier = BookEntry.SUPPLIER_UNKNOWN;
 //            }
 //        });
     }
