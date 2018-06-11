@@ -73,6 +73,10 @@ public class BooksEditor extends AppCompatActivity {
             bind.noSuppliersText.setVisibility(View.VISIBLE);
             bind.noSuppliersText.setText(R.string.no_suppliers);
         } else {
+            bind.spinnerSuppliers.setVisibility(View.VISIBLE);
+            bind.suppliersPhone.setVisibility(View.VISIBLE);
+            bind.supplierAddress.setVisibility(View.VISIBLE);
+            bind.noSuppliersText.setVisibility(View.GONE);
             ArrayAdapter suppliersAdapter = new ArrayAdapter<>(this, R.layout.supplier_spinner, suppliersNames);
             bind.spinnerSuppliers.setAdapter(suppliersAdapter);
             bind.spinnerSuppliers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -146,7 +150,7 @@ public class BooksEditor extends AppCompatActivity {
     // Refresh spinner after pressing button "add a supplier" in book editor, adding it and coming back to 1st editor.
     @Override
     protected void onResume() {
-        setupSpinner();
         super.onResume();
+        setupSpinner();
     }
 }
