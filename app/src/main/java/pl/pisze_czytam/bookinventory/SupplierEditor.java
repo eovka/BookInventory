@@ -15,6 +15,7 @@ import pl.pisze_czytam.bookinventory.databinding.SuppliersEditorBinding;
 
 public class SupplierEditor extends AppCompatActivity {
     SuppliersEditorBinding bind;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

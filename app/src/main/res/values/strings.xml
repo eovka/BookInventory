@@ -22,6 +22,7 @@
     <string name="error_save_book">Error with saving book.</string>
     <string name="book_saved">Book saved with id: </string>
     <string name="supplier">Supplier</string>
+    <string name="no_suppliers">No suppliers on the list. Add some first.</string>
     <string name="dummy_name">New supplier\'s name</string>
     <string name="address">Address</string>
     <string name="dummy_address">ul. Gadających Drzew 12, 56–879 Strzegom</string>

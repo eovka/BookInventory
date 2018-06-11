@@ -1,6 +1,7 @@
 package pl.pisze_czytam.bookinventory;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import pl.pisze_czytam.bookinventory.data.BookContract.*;
 import pl.pisze_czytam.bookinventory.data.BookstoreDbHelper;
@@ -29,20 +32,40 @@ public class BooksEditor extends AppCompatActivity {
     }
 
     private void setupSpinner() {
-        ArrayAdapter suppliersAdapter = ArrayAdapter.createFromResource(this,
-                R.array.suppliers_array, R.layout.supplier_spinner);
-        bind.spinnerSuppliers.setAdapter(suppliersAdapter);
-        bind.spinnerSuppliers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               supplier = (String) parent.getItemAtPosition(position);
-            }
+        BookstoreDbHelper dbHelper = new BookstoreDbHelper(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = { SupplierEntry.COLUMN_NAME };
+        Cursor suppliersCursor = db.query(SupplierEntry.TABLE_NAME, projection, null, null,
+                null, null, SupplierEntry.COLUMN_NAME +" ASC");
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                supplier = BookEntry.SUPPLIER_UNKNOWN;
-            }
-        });
+        int nameColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_NAME);
+
+        ArrayList<String> suppliersNames = new ArrayList<>();
+        while (suppliersCursor.moveToNext()) {
+            String currentName = suppliersCursor.getString(nameColumnIndex);
+            suppliersNames.add(currentName);
+        }
+        suppliersCursor.close();
+
+        if (suppliersNames.isEmpty()) {
+            bind.spinnerSuppliers.setVisibility(View.GONE);
+            bind.noSuppliersText.setVisibility(View.VISIBLE);
+            bind.noSuppliersText.setText(R.string.no_suppliers);
+        } else {
+            ArrayAdapter suppliersAdapter = new ArrayAdapter<>(this, R.layout.supplier_spinner, suppliersNames);
+            bind.spinnerSuppliers.setAdapter(suppliersAdapter);
+            bind.spinnerSuppliers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    supplier = (String) parent.getItemAtPosition(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    supplier = BookEntry.SUPPLIER_UNKNOWN;
+                }
+            });
+        }
     }
 
     @Override

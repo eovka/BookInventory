@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:hint="@string/dummy_name"
-                android:inputType="text" />
+                android:inputType="textCapWords" />
         </LinearLayout>
 
         <LinearLayout
