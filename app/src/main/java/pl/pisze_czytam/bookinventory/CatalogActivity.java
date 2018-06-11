@@ -37,7 +37,7 @@ public class CatalogActivity extends AppCompatActivity {
         displayDatabaseInfo();
     }
 
-    public void displayDatabaseInfo() {
+    private void displayDatabaseInfo() {
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
         String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE, BookEntry.COLUMN_AUTHOR,
                 BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER,
@@ -52,7 +52,7 @@ public class CatalogActivity extends AppCompatActivity {
 
         TextView booksTextView = findViewById(R.id.books_textview);
         try {
-            booksTextView.setText("The books table contains " + bookCursor.getCount() + " items.\n\n");
+            booksTextView.setText("The books table contains " + bookCursor.getCount() + " items.\n");
             booksTextView.append(BookEntry.ID + " - " + BookEntry.COLUMN_TITLE
                     + " - " + BookEntry.COLUMN_AUTHOR
                     + " - " + BookEntry.COLUMN_PRICE
@@ -83,7 +83,7 @@ public class CatalogActivity extends AppCompatActivity {
                         + " - " + currentPrice + " - " + currentQuantity + " - " + currentSupplier
                         +" - " + currentTele +" - " + currentSupAddress);
             }
-            booksTextView.append("\n\n\nThe suppliers table contains " + supplierCursor.getCount() + " names.\n\n");
+            booksTextView.append("\n\nThe suppliers table contains " + supplierCursor.getCount() + " names.\n");
             booksTextView.append(SupplierEntry.ID + " - " + SupplierEntry.COLUMN_NAME
                     + " - " + SupplierEntry.COLUMN_ADDRESS
                     + " - " + SupplierEntry.COLUMN_PHONE + "\n");
@@ -130,14 +130,14 @@ public class CatalogActivity extends AppCompatActivity {
             case R.id.add_supplier:
                 startActivity(new Intent(CatalogActivity.this, SupplierEditor.class));
                 return true;
-            case R.id.delete_books:
+            case R.id.delete_data:
                 showDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void insertDummyBook() {
+    private void insertDummyBook() {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_TITLE, "Mistrz i Małgorzata");
@@ -150,7 +150,7 @@ public class CatalogActivity extends AppCompatActivity {
         db.insert(BookEntry.TABLE_NAME, null, values);
     }
 
-    public void insertDummySupplier() {
+    private void insertDummySupplier() {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(SupplierEntry.COLUMN_NAME, "Znak");
@@ -159,7 +159,7 @@ public class CatalogActivity extends AppCompatActivity {
         db.insert(SupplierEntry.TABLE_NAME, null, values);
     }
 
-    public void showDialog() {
+    private void showDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(CatalogActivity.this);
         dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_warning, null))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -168,6 +168,8 @@ public class CatalogActivity extends AppCompatActivity {
                 SQLiteDatabase db = databaseHelper.getWritableDatabase();
                 db.execSQL("DELETE FROM " + BookEntry.TABLE_NAME);
                 db.execSQL("DELETE FROM sqlite_sequence WHERE name=" + "'books'");
+                db.execSQL("DELETE FROM " + SupplierEntry.TABLE_NAME);
+                db.execSQL("DELETE FROM sqlite_sequence WHERE name=" + "'suppliers'");
                 dialog.dismiss();
                 displayDatabaseInfo();
             }

@@ -5,12 +5,11 @@
     <string name="save">Save</string>
     <string name="insert_dummy_book">+ dummy book</string>
     <string name="insert_dummy_supplier">+ dummy supplier</string>
-    <string name="delete_books">Delete all books</string>
-    <string name="warning_title">Delete ALL books from the catalog?</string>
-    <string name="warning_message">All books\'s data will be permanently removed. It cannot be undone.</string>
+    <string name="delete_all_data">Delete all data</string>
+    <string name="warning_title">Delete ALL DATA from the catalogs?</string>
+    <string name="warning_message">All books and suppliers will be removed. It cannot be undone.</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="books_removed">You removed all the books. The catalog is empty.</string>
     <string name="book_overview">Book overview</string>
     <string name="title">Title</string>
     <string name="author">Author</string>
@@ -31,10 +30,4 @@
     <string name="phone_format">+48123456789</string>
     <string name="error_save_sup">Error with saving supplier.</string>
     <string name="supplier_saved">Supplier saved with id: </string>
-
-    <string name="supplier_czarne">Czarne</string>
-    <string name="supplier_karakter">Karakter</string>
-    <string name="supplier_pwn">PWN</string>
-    <string name="supplier_wab">W.A.B.</string>
-    <string name="supplier_znak">Znak</string>
 </resources>

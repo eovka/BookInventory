@@ -21,7 +21,7 @@ import pl.pisze_czytam.bookinventory.data.BookstoreDbHelper;
 import pl.pisze_czytam.bookinventory.databinding.BooksEditorBinding;
 
 public class BooksEditor extends AppCompatActivity {
-    BooksEditorBinding bind;
+    private BooksEditorBinding bind;
     private String supplier = BookEntry.SUPPLIER_UNKNOWN;
     private String telephone = BookEntry.PHONE_UNKNOWN;
     private String address = BookEntry.ADDRESS_UNKNOWN;
@@ -43,7 +43,7 @@ public class BooksEditor extends AppCompatActivity {
         });
     }
 
-    private void setupSpinner() {
+    public void setupSpinner() {
         BookstoreDbHelper dbHelper = new BookstoreDbHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = { SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_PHONE, SupplierEntry.COLUMN_ADDRESS };
@@ -55,16 +55,14 @@ public class BooksEditor extends AppCompatActivity {
         int addressColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_ADDRESS);
 
         ArrayList<String> suppliersNames = new ArrayList<>();
+        // Build also phones and addresses lists to display them correctly after choosing supplier.
         final ArrayList<String> suppliersPhones = new ArrayList<>();
         final ArrayList<String> suppliersAddresses = new ArrayList<>();
+
         while (suppliersCursor.moveToNext()) {
-            //TODO: simplify to three lines
-            String currentName = suppliersCursor.getString(nameColumnIndex);
-            suppliersNames.add(currentName);
-            String currentPhone = suppliersCursor.getString(phoneColumnIndex);
-            suppliersPhones.add(currentPhone);
-            String currentAddress = suppliersCursor.getString(addressColumnIndex);
-            suppliersAddresses.add(currentAddress);
+            suppliersNames.add(suppliersCursor.getString(nameColumnIndex));
+            suppliersPhones.add(suppliersCursor.getString(phoneColumnIndex));
+            suppliersAddresses.add(suppliersCursor.getString(addressColumnIndex));
         }
         suppliersCursor.close();
 
@@ -114,7 +112,7 @@ public class BooksEditor extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void insertBook() {
+    private void insertBook() {
         String title = bind.bookTitle.getText().toString().trim();
         String author = bind.bookAuthor.getText().toString().trim();
         String priceText = bind.bookPrice.getText().toString().trim();
@@ -131,8 +129,8 @@ public class BooksEditor extends AppCompatActivity {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BookEntry.COLUMN_TITLE, title);
         contentValues.put(BookEntry.COLUMN_AUTHOR, author);
-        contentValues.put(BookEntry.COLUMN_PRICE, bookNumber);
-        contentValues.put(BookEntry.COLUMN_QUANTITY, bookPrice);
+        contentValues.put(BookEntry.COLUMN_PRICE, bookPrice);
+        contentValues.put(BookEntry.COLUMN_QUANTITY, bookNumber);
         contentValues.put(BookEntry.COLUMN_SUPPLIER, supplier);
         contentValues.put(BookEntry.COLUMN_SUP_PHONE, telephone);
         contentValues.put(BookEntry.COLUMN_SUP_ADDRESS, address);
@@ -145,7 +143,7 @@ public class BooksEditor extends AppCompatActivity {
         }
     }
 
-    // To refresh spinner after pressing button "add a supplier" and coming back to "add a book".
+    // Refresh spinner after pressing button "add a supplier" in book editor, adding it and coming back to 1st editor.
     @Override
     protected void onResume() {
         setupSpinner();

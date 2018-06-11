@@ -14,7 +14,7 @@ import pl.pisze_czytam.bookinventory.data.BookstoreDbHelper;
 import pl.pisze_czytam.bookinventory.databinding.SuppliersEditorBinding;
 
 public class SupplierEditor extends AppCompatActivity {
-    SuppliersEditorBinding bind;
+    private SuppliersEditorBinding bind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class SupplierEditor extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void insertSupplier() {
+    private void insertSupplier() {
         String name = bind.supplierName.getText().toString().trim();
         String address = bind.supplierAddress.getText().toString().trim();
         String phone = bind.supplierPhone.getText().toString().trim();
