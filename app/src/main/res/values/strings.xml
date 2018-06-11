@@ -6,10 +6,11 @@
     <string name="insert_dummy_book">+ dummy book</string>
     <string name="insert_dummy_supplier">+ dummy supplier</string>
     <string name="delete_books">Delete all books</string>
-    <string name="warning_title">Are you sure?</string>
-    <string name="warning_message">Delete all books from the catalog?</string>
+    <string name="warning_title">Delete ALL books from the catalog?</string>
+    <string name="warning_message">All books\'s data will be permanently removed. It cannot be undone.</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="books_removed">You removed all the books. The catalog is empty.</string>
     <string name="book_overview">Book overview</string>
     <string name="title">Title</string>
     <string name="author">Author</string>
@@ -18,12 +19,16 @@
     <string name="price_unit">zł</string>
     <string name="quantity">Quantity</string>
     <string name="quantity_hint">Number of books</string>
+    <string name="error_save_book">Error with saving book.</string>
+    <string name="book_saved">Book saved with id: </string>
     <string name="supplier">Supplier</string>
     <string name="dummy_name">New supplier\'s name</string>
     <string name="address">Address</string>
     <string name="dummy_address">ul. Gadających Drzew 12, 56–879 Strzegom</string>
     <string name="phone">Phone</string>
     <string name="phone_format">+48123456789</string>
+    <string name="error_save_sup">Error with saving supplier.</string>
+    <string name="supplier_saved">Supplier saved with id: </string>
 
     <string name="supplier_czarne">Czarne</string>
     <string name="supplier_karakter">Karakter</string>

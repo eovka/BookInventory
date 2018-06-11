@@ -15,17 +15,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import pl.pisze_czytam.bookinventory.data.BookContract.*;
-import pl.pisze_czytam.bookinventory.data.BookDbHelper;
+import pl.pisze_czytam.bookinventory.data.BookstoreDbHelper;
 
 public class CatalogActivity extends AppCompatActivity {
-    private BookDbHelper databaseHelper;
+    private BookstoreDbHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        databaseHelper = new BookDbHelper(this);
+        databaseHelper = new BookstoreDbHelper(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +145,7 @@ public class CatalogActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(SupplierEntry.COLUMN_NAME, "Znak");
         values.put(SupplierEntry.COLUMN_ADDRESS, "ul. Kościuszki 37, 30-105 Kraków");
-        values.put(SupplierEntry.COLUMN_PHONE, "+48 12 61 99 500");
+        values.put(SupplierEntry.COLUMN_PHONE, "+48126199500");
         db.insert(SupplierEntry.TABLE_NAME, null, values);
     }
 
@@ -155,9 +155,11 @@ public class CatalogActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO: clear books table
+                SQLiteDatabase db = databaseHelper.getWritableDatabase();
+                db.execSQL("DELETE FROM " + BookEntry.TABLE_NAME);
+                db.execSQL("DELETE FROM sqlite_sequence WHERE name=" + "'books'");
                 dialog.dismiss();
-                // TODO: Intent?
+                displayDatabaseInfo();
             }
         })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -166,9 +168,7 @@ public class CatalogActivity extends AppCompatActivity {
                 dialog.cancel();
             }
         });
-        // TODO: shorten to one line
-        AlertDialog dialog = dialogBuilder.create();
-        dialog.show();
+        dialogBuilder.create().show();
     }
 
     @Override
