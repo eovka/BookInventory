@@ -40,7 +40,8 @@ public class CatalogActivity extends AppCompatActivity {
     public void displayDatabaseInfo() {
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
         String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE, BookEntry.COLUMN_AUTHOR,
-                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER};
+                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER,
+                BookEntry.COLUMN_SUP_PHONE, BookEntry.COLUMN_SUP_ADDRESS};
         Cursor bookCursor = database.query(BookEntry.TABLE_NAME, bookProjection, null,
                 null, null, null, null);
 
@@ -56,7 +57,9 @@ public class CatalogActivity extends AppCompatActivity {
                     + " - " + BookEntry.COLUMN_AUTHOR
                     + " - " + BookEntry.COLUMN_PRICE
                     + " - " + BookEntry.COLUMN_QUANTITY
-                    + " - " + BookEntry.COLUMN_SUPPLIER + "\n");
+                    + " - " + BookEntry.COLUMN_SUPPLIER
+                    + " - " + BookEntry.COLUMN_SUP_PHONE
+                    + " - " + BookEntry.COLUMN_SUP_ADDRESS +"\n");
 
             int idColumnIndex = bookCursor.getColumnIndex(BookEntry.ID);
             int titleColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_TITLE);
@@ -64,6 +67,8 @@ public class CatalogActivity extends AppCompatActivity {
             int priceColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_PRICE);
             int quantityColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
             int supplierColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER);
+            int teleColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_SUP_PHONE);
+            int supAddressColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_SUP_ADDRESS);
 
             while (bookCursor.moveToNext()) {
                 int currentId = bookCursor.getInt(idColumnIndex);
@@ -72,8 +77,11 @@ public class CatalogActivity extends AppCompatActivity {
                 double currentPrice = bookCursor.getDouble(priceColumnIndex);
                 int currentQuantity = bookCursor.getInt(quantityColumnIndex);
                 String currentSupplier = bookCursor.getString(supplierColumnIndex);
+                String currentTele = bookCursor.getString(teleColumnIndex);
+                String currentSupAddress = bookCursor.getString(supAddressColumnIndex);
                 booksTextView.append("\n" + currentId + " - " + currentTitle + " - " + currentAuthor
-                        + " - " + currentPrice + " - " + currentQuantity + " - " + currentSupplier);
+                        + " - " + currentPrice + " - " + currentQuantity + " - " + currentSupplier
+                        +" - " + currentTele +" - " + currentSupAddress);
             }
             booksTextView.append("\n\n\nThe suppliers table contains " + supplierCursor.getCount() + " names.\n\n");
             booksTextView.append(SupplierEntry.ID + " - " + SupplierEntry.COLUMN_NAME
@@ -137,6 +145,8 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_PRICE, 59.99);
         values.put(BookEntry.COLUMN_QUANTITY, 7);
         values.put(BookEntry.COLUMN_SUPPLIER, "Znak");
+        values.put(BookEntry.COLUMN_SUP_PHONE, "+48126199500");
+        values.put(BookEntry.COLUMN_SUP_ADDRESS, "ul. Kościuszki 37, 30-105 Kraków");
         db.insert(BookEntry.TABLE_NAME, null, values);
     }
 

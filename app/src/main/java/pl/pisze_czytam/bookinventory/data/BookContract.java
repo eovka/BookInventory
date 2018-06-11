@@ -14,8 +14,15 @@ public final class BookContract {
         public static final String COLUMN_PRICE = "price";
         public static final String COLUMN_QUANTITY = "quantity";
         public static final String COLUMN_SUPPLIER = "supplier";
+        public static final String COLUMN_SUP_PHONE = "telephone";
+        public static final String COLUMN_SUP_ADDRESS = "address";
 
         public static final String SUPPLIER_UNKNOWN = "unknown";
+        public static final String PHONE_UNKNOWN = "unknown";
+        public static final String ADDRESS_UNKNOWN = "unknown";
+
+        public static final double PRICE_DEFAULT = 0.00d;
+        public static final int NUMBER_DEFAULT = 0;
     }
 
     public static abstract class SupplierEntry implements BaseColumns {

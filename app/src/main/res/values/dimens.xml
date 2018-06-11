@@ -5,4 +5,5 @@
     <dimen name="title_text">20sp</dimen>
     <dimen name="standard_padding">16dp</dimen>
     <dimen name="double_padding">32dp</dimen>
+    <dimen name="button_margin">48dp</dimen>
 </resources>

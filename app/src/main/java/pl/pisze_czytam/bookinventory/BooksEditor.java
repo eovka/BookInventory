@@ -1,6 +1,7 @@
 package pl.pisze_czytam.bookinventory;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
@@ -22,6 +23,10 @@ import pl.pisze_czytam.bookinventory.databinding.BooksEditorBinding;
 public class BooksEditor extends AppCompatActivity {
     BooksEditorBinding bind;
     private String supplier = BookEntry.SUPPLIER_UNKNOWN;
+    private String telephone = BookEntry.PHONE_UNKNOWN;
+    private String address = BookEntry.ADDRESS_UNKNOWN;
+    private double bookPrice = BookEntry.PRICE_DEFAULT;
+    private int bookNumber = BookEntry.NUMBER_DEFAULT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,26 +34,44 @@ public class BooksEditor extends AppCompatActivity {
         bind = DataBindingUtil.setContentView(this, R.layout.books_editor);
 
         setupSpinner();
+
+        bind.buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BooksEditor.this, SupplierEditor.class));
+            }
+        });
     }
 
     private void setupSpinner() {
         BookstoreDbHelper dbHelper = new BookstoreDbHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] projection = { SupplierEntry.COLUMN_NAME };
+        String[] projection = { SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_PHONE, SupplierEntry.COLUMN_ADDRESS };
         Cursor suppliersCursor = db.query(SupplierEntry.TABLE_NAME, projection, null, null,
                 null, null, SupplierEntry.COLUMN_NAME +" ASC");
 
         int nameColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_NAME);
+        int phoneColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_PHONE);
+        int addressColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_ADDRESS);
 
         ArrayList<String> suppliersNames = new ArrayList<>();
+        final ArrayList<String> suppliersPhones = new ArrayList<>();
+        final ArrayList<String> suppliersAddresses = new ArrayList<>();
         while (suppliersCursor.moveToNext()) {
+            //TODO: simplify to three lines
             String currentName = suppliersCursor.getString(nameColumnIndex);
             suppliersNames.add(currentName);
+            String currentPhone = suppliersCursor.getString(phoneColumnIndex);
+            suppliersPhones.add(currentPhone);
+            String currentAddress = suppliersCursor.getString(addressColumnIndex);
+            suppliersAddresses.add(currentAddress);
         }
         suppliersCursor.close();
 
         if (suppliersNames.isEmpty()) {
             bind.spinnerSuppliers.setVisibility(View.GONE);
+            bind.suppliersPhone.setVisibility(View.GONE);
+            bind.supplierAddress.setVisibility(View.GONE);
             bind.noSuppliersText.setVisibility(View.VISIBLE);
             bind.noSuppliersText.setText(R.string.no_suppliers);
         } else {
@@ -58,11 +81,17 @@ public class BooksEditor extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     supplier = (String) parent.getItemAtPosition(position);
+                    telephone = suppliersPhones.get(position);
+                    bind.suppliersPhone.setText(telephone);
+                    address = suppliersAddresses.get(position);
+                    bind.supplierAddress.setText(address);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     supplier = BookEntry.SUPPLIER_UNKNOWN;
+                    telephone = BookEntry.PHONE_UNKNOWN;
+                    address = BookEntry.ADDRESS_UNKNOWN;
                 }
             });
         }
@@ -88,17 +117,25 @@ public class BooksEditor extends AppCompatActivity {
     public void insertBook() {
         String title = bind.bookTitle.getText().toString().trim();
         String author = bind.bookAuthor.getText().toString().trim();
-        double price = Double.parseDouble(bind.bookPrice.getText().toString().trim());
-        int quantity = Integer.parseInt(bind.booksNumber.getText().toString().trim());
+        String priceText = bind.bookPrice.getText().toString().trim();
+        String numberText = bind.booksNumber.getText().toString().trim();
+        if (!priceText.isEmpty()) {
+            bookPrice = Double.parseDouble(priceText);
+        }
+        if (!numberText.isEmpty()) {
+            bookNumber = Integer.parseInt(numberText);
+        }
 
         BookstoreDbHelper dbHelper = new BookstoreDbHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BookEntry.COLUMN_TITLE, title);
         contentValues.put(BookEntry.COLUMN_AUTHOR, author);
-        contentValues.put(BookEntry.COLUMN_PRICE, price);
-        contentValues.put(BookEntry.COLUMN_QUANTITY, quantity);
+        contentValues.put(BookEntry.COLUMN_PRICE, bookNumber);
+        contentValues.put(BookEntry.COLUMN_QUANTITY, bookPrice);
         contentValues.put(BookEntry.COLUMN_SUPPLIER, supplier);
+        contentValues.put(BookEntry.COLUMN_SUP_PHONE, telephone);
+        contentValues.put(BookEntry.COLUMN_SUP_ADDRESS, address);
 
         long newRowId = db.insert(BookEntry.TABLE_NAME, null, contentValues);
         if (newRowId == -1) {
@@ -106,5 +143,12 @@ public class BooksEditor extends AppCompatActivity {
         } else {
             Toast.makeText(this,  getString(R.string.book_saved) + newRowId, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // To refresh spinner after pressing button "add a supplier" and coming back to "add a book".
+    @Override
+    protected void onResume() {
+        setupSpinner();
+        super.onResume();
     }
 }

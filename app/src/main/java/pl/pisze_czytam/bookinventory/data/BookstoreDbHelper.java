@@ -25,9 +25,11 @@ public class BookstoreDbHelper extends SQLiteOpenHelper {
                 + BookEntry.ID + INTEGER_TYPE + " PRIMARY KEY" + " AUTOINCREMENT" + COMMA_SEP
                 + BookEntry.COLUMN_TITLE + TEXT_TYPE + " NOT NULL" + COMMA_SEP
                 + BookEntry.COLUMN_AUTHOR + TEXT_TYPE + COMMA_SEP
-                + BookEntry.COLUMN_PRICE + REAL_TYPE + COMMA_SEP
-                + BookEntry.COLUMN_QUANTITY + INTEGER_TYPE + COMMA_SEP
-                + BookEntry.COLUMN_SUPPLIER + TEXT_TYPE + " NOT NULL" + ");";
+                + BookEntry.COLUMN_PRICE + REAL_TYPE + " DEFAULT 0" + COMMA_SEP
+                + BookEntry.COLUMN_QUANTITY + INTEGER_TYPE + " DEFAULT 0" + COMMA_SEP
+                + BookEntry.COLUMN_SUPPLIER + TEXT_TYPE + " NOT NULL" + COMMA_SEP
+                + BookEntry.COLUMN_SUP_PHONE + TEXT_TYPE + " NOT NULL" + COMMA_SEP
+                + BookEntry.COLUMN_SUP_ADDRESS + TEXT_TYPE + ");";
 
         String SQL_CREATE_SUPPLIERS = "CREATE TABLE " + SupplierEntry.TABLE_NAME + " ("
                 + SupplierEntry.ID + INTEGER_TYPE + " PRIMARY KEY" + " AUTOINCREMENT" + COMMA_SEP

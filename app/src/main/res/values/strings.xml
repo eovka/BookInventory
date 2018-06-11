@@ -23,6 +23,7 @@
     <string name="book_saved">Book saved with id: </string>
     <string name="supplier">Supplier</string>
     <string name="no_suppliers">No suppliers on the list. Add some first.</string>
+    <string name="add_new_sup">Add a new supplier</string>
     <string name="dummy_name">New supplier\'s name</string>
     <string name="address">Address</string>
     <string name="dummy_address">ul. Gadających Drzew 12, 56–879 Strzegom</string>
