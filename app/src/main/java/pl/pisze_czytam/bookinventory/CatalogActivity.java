@@ -38,17 +38,16 @@ public class CatalogActivity extends AppCompatActivity {
     }
 
     private void displayDatabaseInfo() {
-        SQLiteDatabase database = databaseHelper.getReadableDatabase();
         String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE, BookEntry.COLUMN_AUTHOR,
                 BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER,
                 BookEntry.COLUMN_SUP_PHONE, BookEntry.COLUMN_SUP_ADDRESS};
-        Cursor bookCursor = database.query(BookEntry.TABLE_NAME, bookProjection, null,
-                null, null, null, null);
+        Cursor bookCursor = getContentResolver().query(BookEntry.BOOKS_URI, bookProjection, null,
+                null, null);
 
         String[] supplierProjection = {SupplierEntry.ID, SupplierEntry.COLUMN_NAME,
                 SupplierEntry.COLUMN_ADDRESS, SupplierEntry.COLUMN_PHONE};
-        Cursor supplierCursor = database.query(SupplierEntry.TABLE_NAME, supplierProjection,
-                null, null, null, null, null);
+        Cursor supplierCursor = getContentResolver().query(SupplierEntry.SUPPLIERS_URI, supplierProjection,
+                null, null, null);
 
         TextView booksTextView = findViewById(R.id.books_textview);
         try {
@@ -138,7 +137,6 @@ public class CatalogActivity extends AppCompatActivity {
     }
 
     private void insertDummyBook() {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_TITLE, "Mistrz i Małgorzata");
         values.put(BookEntry.COLUMN_AUTHOR, "Michaił Bułhakow");
@@ -147,16 +145,15 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_SUPPLIER, "Znak");
         values.put(BookEntry.COLUMN_SUP_PHONE, "+48126199500");
         values.put(BookEntry.COLUMN_SUP_ADDRESS, "ul. Kościuszki 37, 30-105 Kraków");
-        db.insert(BookEntry.TABLE_NAME, null, values);
+        getContentResolver().insert(BookEntry.BOOKS_URI, values);
     }
 
     private void insertDummySupplier() {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(SupplierEntry.COLUMN_NAME, "Znak");
         values.put(SupplierEntry.COLUMN_ADDRESS, "ul. Kościuszki 37, 30-105 Kraków");
         values.put(SupplierEntry.COLUMN_PHONE, "+48126199500");
-        db.insert(SupplierEntry.TABLE_NAME, null, values);
+        getContentResolver().insert(SupplierEntry.SUPPLIERS_URI, values);
     }
 
     private void showDialog() {

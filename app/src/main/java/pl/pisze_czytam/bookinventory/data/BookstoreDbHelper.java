@@ -35,7 +35,7 @@ public class BookstoreDbHelper extends SQLiteOpenHelper {
                 + SupplierEntry.ID + INTEGER_TYPE + " PRIMARY KEY" + " AUTOINCREMENT" + COMMA_SEP
                 + SupplierEntry.COLUMN_NAME + TEXT_TYPE + " NOT NULL" + COMMA_SEP
                 + SupplierEntry.COLUMN_ADDRESS + TEXT_TYPE + COMMA_SEP
-                + SupplierEntry.COLUMN_PHONE + TEXT_TYPE + ");";
+                + SupplierEntry.COLUMN_PHONE + TEXT_TYPE + " NOT NULL" + ");";
 
         db.execSQL(SQL_CREATE_BOOKS);
         db.execSQL(SQL_CREATE_SUPPLIERS);
@@ -43,5 +43,10 @@ public class BookstoreDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        String SQL_DELETE_BOOKS = "DROP TABLE IF EXISTS " + BookEntry.TABLE_NAME;
+        String SQL_DELETE_SUPPLIERS = "DROP TABLE IF EXISTS " + SupplierEntry.TABLE_NAME;
+        db.execSQL(SQL_DELETE_BOOKS);
+        db.execSQL(SQL_DELETE_SUPPLIERS);
+        onCreate(db);
     }
 }

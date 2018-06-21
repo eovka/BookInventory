@@ -1,12 +1,25 @@
 package pl.pisze_czytam.bookinventory.data;
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class BookContract {
+    public static final String CONTENT_AUTHORITY = "pl.pisze_czytam.bookinventory";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String BOOKS_PATH = "books";
+    public static final String SUPPLIERS_PATH = "suppliers";
+
     private BookContract() {
     }
 
     public static abstract class BookEntry implements BaseColumns {
+        public static final Uri BOOKS_URI = Uri.withAppendedPath(BASE_CONTENT_URI, BOOKS_PATH);
+        public static final String BOOKS_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
+                + CONTENT_AUTHORITY + "/" + BOOKS_PATH;
+        public static final String BOOK_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/"
+                + CONTENT_AUTHORITY + "/" + BOOKS_PATH;
+
         public static final String TABLE_NAME = "books";
         public static final String ID = BaseColumns._ID;
         public static final String COLUMN_TITLE = "title";
@@ -26,6 +39,12 @@ public final class BookContract {
     }
 
     public static abstract class SupplierEntry implements BaseColumns {
+        public static final Uri SUPPLIERS_URI = Uri.withAppendedPath(BASE_CONTENT_URI, SUPPLIERS_PATH);
+        public static final String SUPPLIERS_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
+                + CONTENT_AUTHORITY + "/" + SUPPLIERS_PATH;
+        public static final String SUPPLIERS_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/"
+                + CONTENT_AUTHORITY + "/" + SUPPLIERS_PATH;
+
         public static final String TABLE_NAME = "suppliers";
         public static final String ID = BaseColumns._ID;
         public static final String COLUMN_NAME = "name";

@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -109,6 +111,22 @@ public class BooksEditor extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
+                // inform user something is wrong with his data (and don't try to add them to database
+                String title = bind.bookTitle.getText().toString();
+                String supplierName = null;
+                if (bind.spinnerSuppliers != null && bind.spinnerSuppliers.getSelectedItem() != null) {
+                    supplierName = bind.spinnerSuppliers.getSelectedItem().toString();
+                }
+                if (TextUtils.isEmpty(title) || TextUtils.isEmpty(supplierName)) {
+                    Toast.makeText(this, R.string.book_required, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                int quantity = Integer.parseInt(bind.booksNumber.getText().toString().trim());
+                double price = Double.parseDouble(bind.bookPrice.getText().toString().trim());
+                if (quantity < 0 || price < 0.0) {
+                    Toast.makeText(this, R.string.values_below_zero, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 insertBook();
                 finish();
                 return true;
@@ -127,9 +145,6 @@ public class BooksEditor extends AppCompatActivity {
         if (!numberText.isEmpty()) {
             bookNumber = Integer.parseInt(numberText);
         }
-
-        BookstoreDbHelper dbHelper = new BookstoreDbHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BookEntry.COLUMN_TITLE, title);
         contentValues.put(BookEntry.COLUMN_AUTHOR, author);
@@ -139,11 +154,11 @@ public class BooksEditor extends AppCompatActivity {
         contentValues.put(BookEntry.COLUMN_SUP_PHONE, telephone);
         contentValues.put(BookEntry.COLUMN_SUP_ADDRESS, address);
 
-        long newRowId = db.insert(BookEntry.TABLE_NAME, null, contentValues);
-        if (newRowId == -1) {
+        Uri newUri = getContentResolver().insert(BookEntry.BOOKS_URI, contentValues);
+        if (newUri == null) {
             Toast.makeText(this, getString(R.string.error_save_book), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this,  getString(R.string.book_saved) + newRowId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,  getString(R.string.book_saved), Toast.LENGTH_SHORT).show();
         }
     }
 

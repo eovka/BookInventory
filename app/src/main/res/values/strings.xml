@@ -18,16 +18,20 @@
     <string name="price_unit">zł</string>
     <string name="quantity">Quantity</string>
     <string name="quantity_hint">Number of books</string>
+    <string name="book_required">Book\'s title and supplier are required.</string>
+    <string name="values_below_zero">Neither price nor quantity can\'t be less than 0.</string>
     <string name="error_save_book">Error with saving book.</string>
-    <string name="book_saved">Book saved with id: </string>
+    <string name="book_saved">Book saved.</string>
     <string name="supplier">Supplier</string>
     <string name="no_suppliers">No suppliers on the list. Add some first.</string>
     <string name="add_new_sup">Add a new supplier</string>
     <string name="dummy_name">New supplier\'s name</string>
     <string name="address">Address</string>
+    <string name="address_unknown">Address unknown</string>
     <string name="dummy_address">ul. Gadających Drzew 12, 56–879 Strzegom</string>
     <string name="phone">Phone</string>
     <string name="phone_format">+48123456789</string>
+    <string name="supplier_required">Name and phone number are required.</string>
     <string name="error_save_sup">Error with saving supplier.</string>
-    <string name="supplier_saved">Supplier saved with id: </string>
+    <string name="supplier_saved">Supplier saved.</string>
 </resources>
