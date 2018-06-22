@@ -3,8 +3,10 @@ package pl.pisze_czytam.bookinventory;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,20 +15,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import pl.pisze_czytam.bookinventory.data.BookContract.*;
-import pl.pisze_czytam.bookinventory.data.BookstoreDbHelper;
 
-public class CatalogActivity extends AppCompatActivity {
-    private BookstoreDbHelper databaseHelper;
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    BookCursorAdapter bookCursorAdapter;
+    private static final int LOADER_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
-
-        databaseHelper = new BookstoreDbHelper(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -35,20 +34,13 @@ public class CatalogActivity extends AppCompatActivity {
                 startActivity(new Intent(CatalogActivity.this, BooksEditor.class));
             }
         });
-        displayDatabaseInfo();
-    }
 
-    private void displayDatabaseInfo() {
-        String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE, BookEntry.COLUMN_AUTHOR,
-                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER,
-                BookEntry.COLUMN_SUP_PHONE, BookEntry.COLUMN_SUP_ADDRESS};
-        Cursor bookCursor = getContentResolver().query(BookEntry.BOOKS_URI, bookProjection, null,
-                null, null);
         ListView listView = findViewById(R.id.listview);
         View emptyView = findViewById(R.id.empty_view);
         listView.setEmptyView(emptyView);
-        BookCursorAdapter bookAdapter = new BookCursorAdapter(this, bookCursor);
-        listView.setAdapter(bookAdapter);
+        bookCursorAdapter = new BookCursorAdapter(this, null);
+        listView.setAdapter(bookCursorAdapter);
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -62,11 +54,9 @@ public class CatalogActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.dummy_book:
                  insertDummyBook();
-                 displayDatabaseInfo();
                 return true;
             case R.id.dummy_supplier:
                 insertDummySupplier();
-                displayDatabaseInfo();
                 return true;
             case R.id.add_books:
                 startActivity(new Intent(CatalogActivity.this, BooksEditor.class));
@@ -107,13 +97,9 @@ public class CatalogActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SQLiteDatabase db = databaseHelper.getWritableDatabase();
-                db.execSQL("DELETE FROM " + BookEntry.TABLE_NAME);
-                db.execSQL("DELETE FROM sqlite_sequence WHERE name=" + "'books'");
-                db.execSQL("DELETE FROM " + SupplierEntry.TABLE_NAME);
-                db.execSQL("DELETE FROM sqlite_sequence WHERE name=" + "'suppliers'");
+                getContentResolver().delete(BookEntry.BOOKS_URI, null, null);
+                getContentResolver().delete(SupplierEntry.SUPPLIERS_URI, null, null);
                 dialog.dismiss();
-                displayDatabaseInfo();
             }
         })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -126,8 +112,20 @@ public class CatalogActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE,
+                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY};
+        return new CursorLoader(this, BookEntry.BOOKS_URI, bookProjection, null,
+                null, BookEntry.COLUMN_TITLE + " ASC");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        bookCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        bookCursorAdapter.swapCursor(null);
     }
 }
