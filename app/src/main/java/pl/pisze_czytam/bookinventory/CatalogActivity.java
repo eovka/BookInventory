@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import pl.pisze_czytam.bookinventory.data.BookContract.*;
@@ -43,67 +44,9 @@ public class CatalogActivity extends AppCompatActivity {
                 BookEntry.COLUMN_SUP_PHONE, BookEntry.COLUMN_SUP_ADDRESS};
         Cursor bookCursor = getContentResolver().query(BookEntry.BOOKS_URI, bookProjection, null,
                 null, null);
-
-        String[] supplierProjection = {SupplierEntry.ID, SupplierEntry.COLUMN_NAME,
-                SupplierEntry.COLUMN_ADDRESS, SupplierEntry.COLUMN_PHONE};
-        Cursor supplierCursor = getContentResolver().query(SupplierEntry.SUPPLIERS_URI, supplierProjection,
-                null, null, null);
-
-        TextView booksTextView = findViewById(R.id.books_textview);
-        try {
-            booksTextView.setText("The books table contains " + bookCursor.getCount() + " items.\n");
-            booksTextView.append(BookEntry.ID + " - " + BookEntry.COLUMN_TITLE
-                    + " - " + BookEntry.COLUMN_AUTHOR
-                    + " - " + BookEntry.COLUMN_PRICE
-                    + " - " + BookEntry.COLUMN_QUANTITY
-                    + " - " + BookEntry.COLUMN_SUPPLIER
-                    + " - " + BookEntry.COLUMN_SUP_PHONE
-                    + " - " + BookEntry.COLUMN_SUP_ADDRESS +"\n");
-
-            int idColumnIndex = bookCursor.getColumnIndex(BookEntry.ID);
-            int titleColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_TITLE);
-            int authorColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_AUTHOR);
-            int priceColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_PRICE);
-            int quantityColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
-            int supplierColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER);
-            int teleColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_SUP_PHONE);
-            int supAddressColumnIndex = bookCursor.getColumnIndex(BookEntry.COLUMN_SUP_ADDRESS);
-
-            while (bookCursor.moveToNext()) {
-                int currentId = bookCursor.getInt(idColumnIndex);
-                String currentTitle = bookCursor.getString(titleColumnIndex);
-                String currentAuthor = bookCursor.getString(authorColumnIndex);
-                double currentPrice = bookCursor.getDouble(priceColumnIndex);
-                int currentQuantity = bookCursor.getInt(quantityColumnIndex);
-                String currentSupplier = bookCursor.getString(supplierColumnIndex);
-                String currentTele = bookCursor.getString(teleColumnIndex);
-                String currentSupAddress = bookCursor.getString(supAddressColumnIndex);
-                booksTextView.append("\n" + currentId + " - " + currentTitle + " - " + currentAuthor
-                        + " - " + currentPrice + " - " + currentQuantity + " - " + currentSupplier
-                        +" - " + currentTele +" - " + currentSupAddress);
-            }
-            booksTextView.append("\n\nThe suppliers table contains " + supplierCursor.getCount() + " names.\n");
-            booksTextView.append(SupplierEntry.ID + " - " + SupplierEntry.COLUMN_NAME
-                    + " - " + SupplierEntry.COLUMN_ADDRESS
-                    + " - " + SupplierEntry.COLUMN_PHONE + "\n");
-
-            int idSupplierIndex = supplierCursor.getColumnIndex(SupplierEntry.ID);
-            int nameColumnIndex = supplierCursor.getColumnIndex(SupplierEntry.COLUMN_NAME);
-            int addressColumnIndex = supplierCursor.getColumnIndex(SupplierEntry.COLUMN_ADDRESS);
-            int phoneColumnIndex = supplierCursor.getColumnIndex(SupplierEntry.COLUMN_PHONE);
-
-            while (supplierCursor.moveToNext()) {
-                int currentId = supplierCursor.getInt(idSupplierIndex);
-                String currentSupplier = supplierCursor.getString(nameColumnIndex);
-                String currentAddress = supplierCursor.getString(addressColumnIndex);
-                String currentPhone = supplierCursor.getString(phoneColumnIndex);
-                booksTextView.append("\n" + currentId + " - " + currentSupplier + " - " + currentAddress
-                        + " - " + currentPhone);
-            }
-        } finally {
-            bookCursor.close();
-            supplierCursor.close();
-        }
+        ListView listView = findViewById(R.id.listview);
+        BookCursorAdapter bookAdapter = new BookCursorAdapter(this, bookCursor);
+        listView.setAdapter(bookAdapter);
     }
 
     @Override

@@ -121,12 +121,6 @@ public class BooksEditor extends AppCompatActivity {
                     Toast.makeText(this, R.string.book_required, Toast.LENGTH_SHORT).show();
                     return true;
                 }
-                int quantity = Integer.parseInt(bind.booksNumber.getText().toString().trim());
-                double price = Double.parseDouble(bind.bookPrice.getText().toString().trim());
-                if (quantity < 0 || price < 0.0) {
-                    Toast.makeText(this, R.string.values_below_zero, Toast.LENGTH_SHORT).show();
-                    return true;
-                }
                 insertBook();
                 finish();
                 return true;

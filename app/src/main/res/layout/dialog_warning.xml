@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/standard_padding"
         android:text="@string/warning_title"
-        android:textSize="@dimen/title_text"
+        android:textSize="@dimen/dialog_title"
         android:textStyle="bold"/>
 
     <TextView

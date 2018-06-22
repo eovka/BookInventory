@@ -10,5 +10,5 @@
     android:paddingStart="@dimen/standard_padding"
     android:paddingTop="@dimen/standard_padding"
     android:singleLine="true"
-    android:textSize="@dimen/category_text"
+    android:textSize="@dimen/title_text"
     android:textStyle="bold" />

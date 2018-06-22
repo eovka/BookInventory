@@ -6,11 +6,12 @@
     android:background="@color/colorBackground"
     tools:context=".CatalogActivity">
 
-    <TextView
-        android:id="@+id/books_textview"
+    <ListView
+        android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/standard_padding" />
+        android:paddingStart="@dimen/standard_padding"
+        android:paddingEnd="@dimen/standard_padding"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
