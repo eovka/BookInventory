@@ -3,11 +3,12 @@
     <string name="add_book">Add a book</string>
     <string name="add_supplier">Add a supplier</string>
     <string name="save">Save</string>
+    <string name="delete">Delete</string>
     <string name="insert_dummy_book">+ dummy book</string>
     <string name="insert_dummy_supplier">+ dummy supplier</string>
     <string name="delete_all_data">Delete all data</string>
-    <string name="warning_title">Delete ALL DATA from the catalogs?</string>
-    <string name="warning_message">All books and suppliers will be removed. It cannot be undone.</string>
+    <string name="delete_all_title">Delete ALL DATA from the catalogs?</string>
+    <string name="delete_all_message">All books and suppliers will be removed. It cannot be undone.</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="book_overview">Book overview</string>
@@ -23,6 +24,8 @@
     <string name="book_saved">Book saved.</string>
     <string name="error_update_book">Error with updating book.</string>
     <string name="book_updated">Book updated.</string>
+    <string name="error_delete_book">Error with deleting item.</string>
+    <string name="book_deleted">Book deleted.</string>
     <string name="supplier">Supplier</string>
     <string name="no_suppliers">No suppliers on the list. Add some first.</string>
     <string name="add_new_sup">Add a new supplier</string>
@@ -40,4 +43,8 @@
     <string name="empty_text_subtitle">Let\'s build a bookcase by adding some books.</string>
     <string name="icon_description">a bookcase</string>
     <string name="edit_book">Edit book info</string>
+    <string name="discard_quit">Discard your changes and quit editing?</string>
+    <string name="keep_editing">Keep editing</string>
+    <string name="discard">Discard</string>
+    <string name="delete_item">Delete this position from the catalog?</string>
 </resources>

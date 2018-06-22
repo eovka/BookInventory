@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -78,7 +79,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 startActivity(new Intent(CatalogActivity.this, SupplierEditor.class));
                 return true;
             case R.id.delete_data:
-                showDialog();
+                showDeleteDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -104,9 +105,9 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         getContentResolver().insert(SupplierEntry.SUPPLIERS_URI, values);
     }
 
-    private void showDialog() {
+    private void showDeleteDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(CatalogActivity.this);
-        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_warning, null))
+        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_all, null))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -124,6 +125,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         dialogBuilder.create().show();
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE,
@@ -133,12 +135,12 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         bookCursorAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         bookCursorAdapter.swapCursor(null);
     }
 }

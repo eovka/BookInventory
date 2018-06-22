@@ -36,7 +36,7 @@ public class SupplierEditor extends AppCompatActivity {
                 String name = bind.supplierName.getText().toString().trim();
                 String phone = bind.supplierPhone.getText().toString().trim();
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone)) {
-                    Toast.makeText(this, R.string.supplier_required, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.supplier_required, Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 insertSupplier();
@@ -58,9 +58,9 @@ public class SupplierEditor extends AppCompatActivity {
 
         Uri newUri = getContentResolver().insert(SupplierEntry.SUPPLIERS_URI, contentValues);
         if (newUri == null) {
-            Toast.makeText(this, getString(R.string.error_save_sup), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.error_save_sup), Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, getString(R.string.supplier_saved), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.supplier_saved), Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -2,24 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/smaller_padding"
     android:orientation="vertical"
     android:padding="@dimen/standard_padding">
 
     <TextView
         android:id="@+id/warning_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/standard_padding"
-        android:text="@string/warning_title"
-        android:textSize="@dimen/dialog_title"
-        android:textStyle="bold"/>
+        style="@style/DialogTexts"
+        android:text="@string/delete_all_title" />
 
     <TextView
         android:id="@+id/warning_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/standard_padding"
-        android:text="@string/warning_message"
+        android:text="@string/delete_all_message"
         android:textSize="@dimen/normal_text" />
-
 </LinearLayout>

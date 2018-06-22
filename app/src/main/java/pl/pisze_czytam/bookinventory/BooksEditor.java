@@ -1,5 +1,6 @@
 package pl.pisze_czytam.bookinventory;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.content.ContentValues;
@@ -10,12 +11,15 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,6 +41,15 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
     private int bookQuantity = BookEntry.NUMBER_DEFAULT;
     Uri clickedBook;
     private static final int LOADER_ID = 1;
+    private boolean bookChanged;
+
+    private View.OnTouchListener touchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            bookChanged = true;
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +69,12 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
                 startActivity(new Intent(BooksEditor.this, SupplierEditor.class));
             }
         });
+
+        bind.bookTitle.setOnTouchListener(touchListener);
+        bind.bookAuthor.setOnTouchListener(touchListener);
+        bind.bookPrice.setOnTouchListener(touchListener);
+        bind.booksQuantity.setOnTouchListener(touchListener);
+        bind.spinnerSuppliers.setOnTouchListener(touchListener);
     }
 
     public void setupSpinner() {
@@ -121,10 +140,33 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+            if (clickedBook == null) {
+                MenuItem deleteItem = menu.findItem(R.id.action_delete);
+                deleteItem.setVisible(false);
+            }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                if (!bookChanged) {
+                    NavUtils.navigateUpFromSameTask(BooksEditor.this);
+                    return true;
+                }
+                DialogInterface.OnClickListener discardClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        NavUtils.navigateUpFromSameTask(BooksEditor.this);
+                    }
+                };
+                showUnsavedDialog(discardClickListener);
+                return true;
             case R.id.action_save:
-                // inform user something is wrong with his data (and don't try to add them to database
+                // inform user something is wrong with his data (and don't try to add them to database)
                 String title = bind.bookTitle.getText().toString();
                 String supplierName = null;
                 if (bind.spinnerSuppliers != null && bind.spinnerSuppliers.getSelectedItem() != null) {
@@ -136,6 +178,9 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
                 }
                 saveBook();
                 finish();
+                return true;
+            case R.id.action_delete:
+                showDeleteDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -164,25 +209,18 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
         if (clickedBook == null) {
             Uri newUri = getContentResolver().insert(BookEntry.BOOKS_URI, contentValues);
             if (newUri == null) {
-                Toast.makeText(this, getString(R.string.error_save_book), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_save_book), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, getString(R.string.book_saved), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.book_saved), Toast.LENGTH_SHORT).show();
             }
         } else {
             long rowsAffected = getContentResolver().update(clickedBook, contentValues, null, null);
             if (rowsAffected == 0) {
-                Toast.makeText(this, getString(R.string.error_update_book), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.error_update_book), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, R.string.book_updated, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.book_updated), Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    // Refresh spinner after pressing button "add a supplier" in book editor, adding it and coming back to 1st editor.
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setupSpinner();
     }
 
     @NonNull
@@ -220,7 +258,7 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
         bind.spinnerSuppliers.setSelection(getIndex(bind.spinnerSuppliers, supplier));
     }
 
-    // helper method to find supplier in a spinner and set him in editor activity
+    /** Find supplier in a spinner and set a proper one when editing a book. **/
     private int getIndex(Spinner spinner, String myString) {
         for (int i = 0; i < spinner.getCount(); i++) {
             if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)) {
@@ -228,5 +266,76 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
             }
         }
         return 0;
+    }
+
+    /** Show dialog about unsaved changes - to use both when back or up pressed. **/
+    private void showUnsavedDialog(DialogInterface.OnClickListener discardClickListener) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksEditor.this);
+        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_unsaved, null))
+                .setPositiveButton(R.string.discard, discardClickListener)
+                .setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+        dialogBuilder.create().show();
+    }
+
+    private void showDeleteDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksEditor.this);
+        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_item, null))
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteBook();
+                            }
+                        })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+        dialogBuilder.create().show();
+    }
+
+    private void deleteBook() {
+        if (clickedBook != null) {
+            int rowsDelete = getContentResolver().delete(clickedBook, null, null);
+            if (rowsDelete == 0) {
+                Toast.makeText(getApplicationContext(), R.string.error_delete_book, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.book_deleted, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!bookChanged) {
+            super.onBackPressed();
+            return;
+        }
+
+        DialogInterface.OnClickListener discardClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        };
+        showUnsavedDialog(discardClickListener);
+    }
+
+    // Refresh spinner after pressing button "add a supplier" in book editor, adding it and coming back to 1st editor.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupSpinner();
     }
 }
