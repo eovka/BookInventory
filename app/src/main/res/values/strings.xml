@@ -34,4 +34,7 @@
     <string name="error_save_sup">Error with saving supplier.</string>
     <string name="supplier_saved">Supplier saved.</string>
     <string name="sale">Sale</string>
+    <string name="empty_text_title">It\'s a bit empty here…</string>
+    <string name="empty_text_subtitle">Let\'s build a bookcase by adding some books.</string>
+    <string name="icon_description">a bookcase</string>
 </resources>

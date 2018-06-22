@@ -45,6 +45,8 @@ public class CatalogActivity extends AppCompatActivity {
         Cursor bookCursor = getContentResolver().query(BookEntry.BOOKS_URI, bookProjection, null,
                 null, null);
         ListView listView = findViewById(R.id.listview);
+        View emptyView = findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
         BookCursorAdapter bookAdapter = new BookCursorAdapter(this, bookCursor);
         listView.setAdapter(bookAdapter);
     }
