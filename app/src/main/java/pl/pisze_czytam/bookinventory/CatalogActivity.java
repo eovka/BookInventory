@@ -1,8 +1,10 @@
 package pl.pisze_czytam.bookinventory;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import pl.pisze_czytam.bookinventory.data.BookContract.*;
@@ -41,6 +44,16 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         bookCursorAdapter = new BookCursorAdapter(this, null);
         listView.setAdapter(bookCursorAdapter);
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent editorIntent = new Intent(CatalogActivity.this, BooksEditor.class);
+                Uri currentBookUri = ContentUris.withAppendedId(BookEntry.BOOKS_URI, id);
+                editorIntent.setData(currentBookUri);
+                startActivity(editorIntent);
+            }
+        });
     }
 
     @Override

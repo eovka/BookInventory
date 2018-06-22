@@ -1,5 +1,7 @@
 package pl.pisze_czytam.bookinventory;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,6 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -14,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,19 +28,26 @@ import pl.pisze_czytam.bookinventory.data.BookContract.*;
 import pl.pisze_czytam.bookinventory.data.BookstoreDbHelper;
 import pl.pisze_czytam.bookinventory.databinding.BooksEditorBinding;
 
-public class BooksEditor extends AppCompatActivity {
+public class BooksEditor extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private BooksEditorBinding bind;
     private String supplier = BookEntry.SUPPLIER_UNKNOWN;
     private String telephone = BookEntry.PHONE_UNKNOWN;
     private String address = BookEntry.ADDRESS_UNKNOWN;
     private double bookPrice = BookEntry.PRICE_DEFAULT;
-    private int bookNumber = BookEntry.NUMBER_DEFAULT;
+    private int bookQuantity = BookEntry.NUMBER_DEFAULT;
+    Uri clickedBook;
+    private static final int LOADER_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bind = DataBindingUtil.setContentView(this, R.layout.books_editor);
 
+        clickedBook = getIntent().getData();
+        if (clickedBook != null) {
+            setTitle(R.string.edit_book);
+            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        }
         setupSpinner();
 
         bind.buttonAdd.setOnClickListener(new View.OnClickListener() {
@@ -48,9 +61,9 @@ public class BooksEditor extends AppCompatActivity {
     public void setupSpinner() {
         BookstoreDbHelper dbHelper = new BookstoreDbHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] projection = { SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_PHONE, SupplierEntry.COLUMN_ADDRESS };
+        String[] projection = {SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_PHONE, SupplierEntry.COLUMN_ADDRESS};
         Cursor suppliersCursor = db.query(SupplierEntry.TABLE_NAME, projection, null, null,
-                null, null, SupplierEntry.COLUMN_NAME +" ASC");
+                null, null, SupplierEntry.COLUMN_NAME + " ASC");
 
         int nameColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_NAME);
         int phoneColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_PHONE);
@@ -121,38 +134,47 @@ public class BooksEditor extends AppCompatActivity {
                     Toast.makeText(this, R.string.book_required, Toast.LENGTH_SHORT).show();
                     return true;
                 }
-                insertBook();
+                saveBook();
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void insertBook() {
+    private void saveBook() {
         String title = bind.bookTitle.getText().toString().trim();
         String author = bind.bookAuthor.getText().toString().trim();
         String priceText = bind.bookPrice.getText().toString().trim();
-        String numberText = bind.booksNumber.getText().toString().trim();
+        String numberText = bind.booksQuantity.getText().toString().trim();
         if (!priceText.isEmpty()) {
             bookPrice = Double.parseDouble(priceText);
         }
         if (!numberText.isEmpty()) {
-            bookNumber = Integer.parseInt(numberText);
+            bookQuantity = Integer.parseInt(numberText);
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put(BookEntry.COLUMN_TITLE, title);
         contentValues.put(BookEntry.COLUMN_AUTHOR, author);
         contentValues.put(BookEntry.COLUMN_PRICE, bookPrice);
-        contentValues.put(BookEntry.COLUMN_QUANTITY, bookNumber);
+        contentValues.put(BookEntry.COLUMN_QUANTITY, bookQuantity);
         contentValues.put(BookEntry.COLUMN_SUPPLIER, supplier);
         contentValues.put(BookEntry.COLUMN_SUP_PHONE, telephone);
         contentValues.put(BookEntry.COLUMN_SUP_ADDRESS, address);
 
-        Uri newUri = getContentResolver().insert(BookEntry.BOOKS_URI, contentValues);
-        if (newUri == null) {
-            Toast.makeText(this, getString(R.string.error_save_book), Toast.LENGTH_SHORT).show();
+        if (clickedBook == null) {
+            Uri newUri = getContentResolver().insert(BookEntry.BOOKS_URI, contentValues);
+            if (newUri == null) {
+                Toast.makeText(this, getString(R.string.error_save_book), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.book_saved), Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this,  getString(R.string.book_saved), Toast.LENGTH_SHORT).show();
+            long rowsAffected = getContentResolver().update(clickedBook, contentValues, null, null);
+            if (rowsAffected == 0) {
+                Toast.makeText(this, getString(R.string.error_update_book), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.book_updated, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -161,5 +183,50 @@ public class BooksEditor extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         setupSpinner();
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE, BookEntry.COLUMN_AUTHOR,
+                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER,
+                BookEntry.COLUMN_SUP_ADDRESS, BookEntry.COLUMN_SUP_PHONE};
+        return new CursorLoader(this, clickedBook, bookProjection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        if (cursor.moveToFirst()) {
+            String title = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_TITLE));
+            String author = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_AUTHOR));
+            double price = cursor.getDouble(cursor.getColumnIndex(BookEntry.COLUMN_PRICE));
+            int quantity = cursor.getInt(cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY));
+            String supplier = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER));
+
+            bind.bookTitle.setText(title);
+            bind.bookAuthor.setText(author);
+            bind.bookPrice.setText(String.valueOf(price));
+            bind.booksQuantity.setText(String.valueOf(quantity));
+            bind.spinnerSuppliers.setSelection(getIndex(bind.spinnerSuppliers, supplier));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        bind.bookTitle.setText(null);
+        bind.bookAuthor.setText(null);
+        bind.bookPrice.setText(null);
+        bind.booksQuantity.setText(null);
+        bind.spinnerSuppliers.setSelection(getIndex(bind.spinnerSuppliers, supplier));
+    }
+
+    // helper method to find supplier in a spinner and set him in editor activity
+    private int getIndex(Spinner spinner, String myString) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)) {
+                return i;
+            }
+        }
+        return 0;
     }
 }

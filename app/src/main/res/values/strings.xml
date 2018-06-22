@@ -21,6 +21,8 @@
     <string name="book_required">Book\'s title and supplier are required.</string>
     <string name="error_save_book">Error with saving book.</string>
     <string name="book_saved">Book saved.</string>
+    <string name="error_update_book">Error with updating book.</string>
+    <string name="book_updated">Book updated.</string>
     <string name="supplier">Supplier</string>
     <string name="no_suppliers">No suppliers on the list. Add some first.</string>
     <string name="add_new_sup">Add a new supplier</string>
@@ -37,4 +39,5 @@
     <string name="empty_text_title">It\'s a bit empty here…</string>
     <string name="empty_text_subtitle">Let\'s build a bookcase by adding some books.</string>
     <string name="icon_description">a bookcase</string>
+    <string name="edit_book">Edit book info</string>
 </resources>

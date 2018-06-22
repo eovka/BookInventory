@@ -85,7 +85,7 @@
                 android:text="@string/quantity" />
 
             <EditText
-                android:id="@+id/books_number"
+                android:id="@+id/books_quantity"
                 style="@style/EditorInserts"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
