@@ -15,6 +15,7 @@
     <string name="title">Title</string>
     <string name="author">Author</string>
     <string name="price">Price</string>
+    <string name="priceless">priceless</string>
     <string name="price_hint">for one book</string>
     <string name="price_unit">zł</string>
     <string name="quantity">Quantity</string>
@@ -39,6 +40,9 @@
     <string name="error_save_sup">Error with saving supplier.</string>
     <string name="supplier_saved">Supplier saved.</string>
     <string name="sale">Sale</string>
+    <string name="two_left">Only two books left. Consider ordering some.</string>
+    <string name="cannot_sale">"Cannot sell &#8212; no item in the stock.</string>
+    <string name="order">Order</string>
     <string name="empty_text_title">It\'s a bit empty here…</string>
     <string name="empty_text_subtitle">Let\'s build a bookcase by adding some books.</string>
     <string name="icon_description">a bookcase</string>

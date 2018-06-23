@@ -173,7 +173,7 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
                     supplierName = bind.spinnerSuppliers.getSelectedItem().toString();
                 }
                 if (TextUtils.isEmpty(title) || TextUtils.isEmpty(supplierName)) {
-                    Toast.makeText(this, R.string.book_required, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.book_required, Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 saveBook();
@@ -223,6 +223,77 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
         }
     }
 
+    private void deleteBook() {
+        if (clickedBook != null) {
+            int rowsDelete = getContentResolver().delete(clickedBook, null, null);
+            if (rowsDelete == 0) {
+                Toast.makeText(getApplicationContext(), R.string.error_delete_book, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.book_deleted, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    /** Show dialog about unsaved changes - to use both when back or up pressed. **/
+    private void showUnsavedDialog(DialogInterface.OnClickListener discardClickListener) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksEditor.this);
+        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_unsaved, null))
+                .setPositiveButton(R.string.discard, discardClickListener)
+                .setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+        dialogBuilder.create().show();
+    }
+
+    private void showDeleteDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksEditor.this);
+        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_item, null))
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteBook();
+                            }
+                        })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+        dialogBuilder.create().show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!bookChanged) {
+            super.onBackPressed();
+            return;
+        }
+
+        DialogInterface.OnClickListener discardClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        };
+        showUnsavedDialog(discardClickListener);
+    }
+
+    // Refresh spinner after pressing button "add a supplier" in book editor, adding it and coming back to 1st editor.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupSpinner();
+    }
+
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
@@ -266,76 +337,5 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
             }
         }
         return 0;
-    }
-
-    /** Show dialog about unsaved changes - to use both when back or up pressed. **/
-    private void showUnsavedDialog(DialogInterface.OnClickListener discardClickListener) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksEditor.this);
-        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_unsaved, null))
-                .setPositiveButton(R.string.discard, discardClickListener)
-                .setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (dialog != null) {
-                            dialog.dismiss();
-                        }
-                    }
-                });
-        dialogBuilder.create().show();
-    }
-
-    private void showDeleteDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksEditor.this);
-        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_item, null))
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteBook();
-                            }
-                        })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (dialog != null) {
-                            dialog.dismiss();
-                        }
-                    }
-                });
-        dialogBuilder.create().show();
-    }
-
-    private void deleteBook() {
-        if (clickedBook != null) {
-            int rowsDelete = getContentResolver().delete(clickedBook, null, null);
-            if (rowsDelete == 0) {
-                Toast.makeText(getApplicationContext(), R.string.error_delete_book, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.book_deleted, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!bookChanged) {
-            super.onBackPressed();
-            return;
-        }
-
-        DialogInterface.OnClickListener discardClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        };
-        showUnsavedDialog(discardClickListener);
-    }
-
-    // Refresh spinner after pressing button "add a supplier" in book editor, adding it and coming back to 1st editor.
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setupSpinner();
     }
 }

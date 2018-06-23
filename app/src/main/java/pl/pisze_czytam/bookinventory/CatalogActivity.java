@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+
 import android.widget.ListView;
 
 import pl.pisze_czytam.bookinventory.data.BookContract.*;
@@ -86,6 +87,14 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     private void insertDummyBook() {
+        // to avoid adding dummy book without supplier (it's impossible in normal app logic)
+        String[] projection = {SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_PHONE, SupplierEntry.COLUMN_ADDRESS};
+        Cursor cursor = getContentResolver().query(SupplierEntry.SUPPLIERS_URI, projection, null, null,
+                null, null);
+        if (!cursor.moveToFirst()) {
+            insertDummySupplier();
+        }
+
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_TITLE, "Mistrz i Małgorzata");
         values.put(BookEntry.COLUMN_AUTHOR, "Michaił Bułhakow");
