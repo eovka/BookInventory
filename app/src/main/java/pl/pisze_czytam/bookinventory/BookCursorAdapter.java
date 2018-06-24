@@ -79,7 +79,7 @@ public class BookCursorAdapter extends CursorAdapter {
                         Toast.makeText(context.getApplicationContext(), context.getApplicationContext().getResources().getString(R.string.error_update_book), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    //todo: if order button stays, intent instead of this message
+                    //todo: if order button stays, intent instead of this message (strunę wtedy też usunąć)
                     Toast.makeText(context.getApplicationContext(), context.getApplicationContext().getResources().getString(R.string.cannot_sale), Toast.LENGTH_SHORT).show();
                 }
             }

@@ -46,12 +46,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    style="@style/DetailsInfo"
+                    style="@style/ListItemDetails"
                     android:text="@string/price" />
 
                 <TextView
                     android:id="@+id/price_view"
-                    style="@style/DetailsInfo"
+                    style="@style/ListItemDetails"
                     tools:text="10 zł" />
 
             </LinearLayout>
@@ -63,12 +63,12 @@
 
                 <TextView
                     android:id="@+id/quantity_label"
-                    style="@style/DetailsInfo"
+                    style="@style/ListItemDetails"
                     android:text="@string/quantity" />
 
                 <TextView
                     android:id="@+id/quantity_view"
-                    style="@style/DetailsInfo"
+                    style="@style/ListItemDetails"
                     tools:text="10" />
             </LinearLayout>
         </LinearLayout>

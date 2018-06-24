@@ -33,6 +33,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:fontFamily">serif-monospace</item>
         <item name="android:paddingTop">@dimen/standard_padding</item>
+        <item name="android:paddingBottom">@dimen/standard_padding</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">@dimen/title_text</item>
         <item name="android:textStyle">bold</item>
@@ -41,9 +42,15 @@
     <style name="EditorInserts">
         <item name="android:fontFamily">serif-monospace</item>
         <item name="android:paddingTop">@dimen/standard_padding</item>
-        <item name="android:textSize">@dimen/normal_text</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="EditorInserts.Simple">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">2</item>
+    </style>
+
 
     <style name="ListItemTitle">
         <item name="android:layout_width">wrap_content</item>
@@ -55,7 +62,7 @@
         <item name="android:paddingBottom">@dimen/smaller_padding</item>
     </style>
 
-    <style name="DetailsInfo">
+    <style name="ListItemDetails">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
@@ -66,5 +73,33 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/standard_padding</item>
         <item name="android:textSize">@dimen/dialog_title</item>
+    </style>
+
+    <style name="DetailsCategory">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">serif-monospace</item>
+        <item name="android:paddingTop">@dimen/standard_padding</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DetailsInfo">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:fontFamily">serif-monospace</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ButtonsSmall">
+        <item name="android:layout_width">@dimen/button_size</item>
+        <item name="android:layout_height">@dimen/button_size</item>
+        <item name="android:layout_marginTop">@dimen/smaller_padding</item>
+        <item name="android:layout_marginBottom">@dimen/smaller_padding</item>
+        <item name="android:background">@color/buttonColor</item>
+        <item name="android:textSize">@dimen/title_text</item>
+        <item name="android:textColor">@color/colorBackground</item>
     </style>
 </resources>

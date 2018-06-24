@@ -11,15 +11,15 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import pl.pisze_czytam.bookinventory.data.BookContract.*;
-import pl.pisze_czytam.bookinventory.databinding.SuppliersEditorBinding;
+import pl.pisze_czytam.bookinventory.databinding.SupplierEditorBinding;
 
 public class SupplierEditor extends AppCompatActivity {
-    private SuppliersEditorBinding bind;
+    private SupplierEditorBinding bind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bind = DataBindingUtil.setContentView(this, R.layout.suppliers_editor);
+        bind = DataBindingUtil.setContentView(this, R.layout.supplier_editor);
     }
 
     @Override

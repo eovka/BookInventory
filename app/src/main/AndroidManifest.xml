@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CatalogActivity">
+        <activity android:name=".BooksCatalog">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,22 +17,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BooksEditor"
+            android:name=".BookDetails"
+            android:label="@string/book_overview"
+            android:parentActivityName=".BooksCatalog">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BooksCatalog" />
+        </activity>
+        <activity
+            android:name=".BookEditor"
             android:label="@string/add_book"
-            android:parentActivityName=".CatalogActivity"
+            android:parentActivityName=".BooksCatalog"
             android:theme="@style/EditorTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CatalogActivity" />
+                android:value=".BooksCatalog" />
         </activity>
         <activity
             android:name=".SupplierEditor"
             android:label="@string/add_supplier"
-            android:parentActivityName=".CatalogActivity"
+            android:parentActivityName=".BooksCatalog"
             android:theme="@style/EditorTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".CatalogActivity" />
+                android:value=".BooksCatalog" />
         </activity>
 
         <provider

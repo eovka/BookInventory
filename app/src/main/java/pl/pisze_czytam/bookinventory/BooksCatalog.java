@@ -23,20 +23,20 @@ import android.widget.ListView;
 
 import pl.pisze_czytam.bookinventory.data.BookContract.*;
 
-public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BooksCatalog extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     BookCursorAdapter bookCursorAdapter;
     private static final int LOADER_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_catalog);
+        setContentView(R.layout.books_catalog);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CatalogActivity.this, BooksEditor.class));
+                startActivity(new Intent(BooksCatalog.this, BookEditor.class));
             }
         });
 
@@ -50,10 +50,10 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent editorIntent = new Intent(CatalogActivity.this, BooksEditor.class);
+                Intent detailsIntent = new Intent(BooksCatalog.this, BookDetails.class);
                 Uri currentBookUri = ContentUris.withAppendedId(BookEntry.BOOKS_URI, id);
-                editorIntent.setData(currentBookUri);
-                startActivity(editorIntent);
+                detailsIntent.setData(currentBookUri);
+                startActivity(detailsIntent);
             }
         });
     }
@@ -74,10 +74,10 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 insertDummySupplier();
                 return true;
             case R.id.add_books:
-                startActivity(new Intent(CatalogActivity.this, BooksEditor.class));
+                startActivity(new Intent(BooksCatalog.this, BookEditor.class));
                 return true;
             case R.id.add_supplier:
-                startActivity(new Intent(CatalogActivity.this, SupplierEditor.class));
+                startActivity(new Intent(BooksCatalog.this, SupplierEditor.class));
                 return true;
             case R.id.delete_data:
                 showDeleteDialog();
@@ -115,7 +115,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     private void showDeleteDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(CatalogActivity.this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksCatalog.this);
         dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_all, null))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override

@@ -30,10 +30,10 @@ import java.util.ArrayList;
 
 import pl.pisze_czytam.bookinventory.data.BookContract.*;
 import pl.pisze_czytam.bookinventory.data.BookstoreDbHelper;
-import pl.pisze_czytam.bookinventory.databinding.BooksEditorBinding;
+import pl.pisze_czytam.bookinventory.databinding.BookEditorBinding;
 
-public class BooksEditor extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    private BooksEditorBinding bind;
+public class BookEditor extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    private BookEditorBinding bind;
     private String supplier = BookEntry.SUPPLIER_UNKNOWN;
     private String telephone = BookEntry.PHONE_UNKNOWN;
     private String address = BookEntry.ADDRESS_UNKNOWN;
@@ -54,7 +54,7 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bind = DataBindingUtil.setContentView(this, R.layout.books_editor);
+        bind = DataBindingUtil.setContentView(this, R.layout.book_editor);
 
         clickedBook = getIntent().getData();
         if (clickedBook != null) {
@@ -66,7 +66,7 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
         bind.buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BooksEditor.this, SupplierEditor.class));
+                startActivity(new Intent(BookEditor.this, SupplierEditor.class));
             }
         });
 
@@ -134,18 +134,20 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editor_menu, menu);
-        return true;
-    }
-
-    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
             if (clickedBook == null) {
                 MenuItem deleteItem = menu.findItem(R.id.action_delete);
                 deleteItem.setVisible(false);
             }
+            MenuItem editItem = menu.findItem(R.id.action_edit);
+            editItem.setVisible(false);
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.editor_menu, menu);
         return true;
     }
 
@@ -154,13 +156,13 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (!bookChanged) {
-                    NavUtils.navigateUpFromSameTask(BooksEditor.this);
+                    NavUtils.navigateUpFromSameTask(BookEditor.this);
                     return true;
                 }
                 DialogInterface.OnClickListener discardClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        NavUtils.navigateUpFromSameTask(BooksEditor.this);
+                        NavUtils.navigateUpFromSameTask(BookEditor.this);
                     }
                 };
                 showUnsavedDialog(discardClickListener);
@@ -237,7 +239,7 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
 
     /** Show dialog about unsaved changes - to use both when back or up pressed. **/
     private void showUnsavedDialog(DialogInterface.OnClickListener discardClickListener) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksEditor.this);
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BookEditor.this);
         dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_unsaved, null))
                 .setPositiveButton(R.string.discard, discardClickListener)
                 .setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
@@ -252,7 +254,7 @@ public class BooksEditor extends AppCompatActivity implements LoaderManager.Load
     }
 
     private void showDeleteDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksEditor.this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BookEditor.this);
         dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_item, null))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
