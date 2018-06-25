@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import pl.pisze_czytam.bookinventory.data.BookContract.*;
+import pl.pisze_czytam.bookinventory.data.BookstoreContract.*;
 import pl.pisze_czytam.bookinventory.databinding.SupplierEditorBinding;
 
 public class SupplierEditor extends AppCompatActivity {

@@ -4,13 +4,13 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public final class BookContract {
+public final class BookstoreContract {
     public static final String CONTENT_AUTHORITY = "pl.pisze_czytam.bookinventory";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String BOOKS_PATH = "books";
     public static final String SUPPLIERS_PATH = "suppliers";
 
-    private BookContract() {
+    private BookstoreContract() {
     }
 
     public static abstract class BookEntry implements BaseColumns {

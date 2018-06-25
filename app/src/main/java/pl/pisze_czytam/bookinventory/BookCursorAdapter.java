@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import pl.pisze_czytam.bookinventory.data.BookContract.BookEntry;
+import pl.pisze_czytam.bookinventory.data.BookstoreContract.BookEntry;
 
 public class BookCursorAdapter extends CursorAdapter {
 

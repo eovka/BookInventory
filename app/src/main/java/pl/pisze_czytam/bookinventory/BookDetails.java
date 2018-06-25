@@ -20,7 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import pl.pisze_czytam.bookinventory.data.BookContract.BookEntry;
+import pl.pisze_czytam.bookinventory.data.BookstoreContract.BookEntry;
 import pl.pisze_czytam.bookinventory.databinding.BookDetailsBinding;
 
 public class BookDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,

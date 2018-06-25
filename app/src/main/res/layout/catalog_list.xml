@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    tools:context=".BooksCatalog">
+    android:background="@color/colorBackground">
 
     <ListView
         android:id="@+id/listview"
@@ -20,21 +18,21 @@
         android:layout_centerInParent="true">
 
         <ImageView
-            android:id="@+id/bookcase_image"
+            android:id="@+id/empty_list_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/icon_description"
-            android:src="@drawable/ic_bookcase" />
+            android:src="@drawable/bookcase" />
 
         <TextView
             android:id="@+id/empty_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bookcase_image"
+            android:layout_below="@+id/empty_list_image"
             android:layout_centerHorizontal="true"
             android:padding="@dimen/standard_padding"
-            android:text="@string/empty_text_title"
+            android:text="@string/no_books_title"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/title_text"
             android:textStyle="bold" />
@@ -47,14 +45,14 @@
             android:layout_centerHorizontal="true"
             android:paddingEnd="@dimen/standard_padding"
             android:paddingStart="@dimen/standard_padding"
-            android:text="@string/empty_text_subtitle"
+            android:text="@string/no_books_subtitle"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_book"
+        android:id="@+id/fab_add"
         style="@style/FabStyle"
         android:src="@drawable/ic_book" />
 </RelativeLayout>

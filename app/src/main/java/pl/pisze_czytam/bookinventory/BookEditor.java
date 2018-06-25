@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import pl.pisze_czytam.bookinventory.data.BookContract.*;
+import pl.pisze_czytam.bookinventory.data.BookstoreContract.*;
 import pl.pisze_czytam.bookinventory.data.BookstoreDbHelper;
 import pl.pisze_czytam.bookinventory.databinding.BookEditorBinding;
 

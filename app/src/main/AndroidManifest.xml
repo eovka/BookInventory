@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BooksCatalog">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,33 +19,33 @@
         <activity
             android:name=".BookDetails"
             android:label="@string/book_overview"
-            android:parentActivityName=".BooksCatalog">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".BooksCatalog" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".BookEditor"
             android:label="@string/add_book"
-            android:parentActivityName=".BooksCatalog"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/EditorTheme"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".BooksCatalog" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".SupplierEditor"
             android:label="@string/add_supplier"
-            android:parentActivityName=".BooksCatalog"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/EditorTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".BooksCatalog" />
+                android:value=".MainActivity" />
         </activity>
 
         <provider
-            android:name=".data.BookProvider"
+            android:name=".data.BookstoreProvider"
             android:authorities="pl.pisze_czytam.bookinventory"
             android:exported="false" />
     </application>

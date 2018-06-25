@@ -55,6 +55,24 @@
 
             <TextView
                 style="@style/EditorCategory"
+                android:text="@string/email" />
+
+            <EditText
+                android:id="@+id/supplier_mail"
+                style="@style/EditorInserts"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="@string/email_hint"
+                android:inputType="textEmailAddress" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/EditorCategory"
                 android:text="@string/phone" />
 
             <EditText

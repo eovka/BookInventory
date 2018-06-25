@@ -1,61 +1,32 @@
 package pl.pisze_czytam.bookinventory;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.support.design.widget.TabLayout;
 import android.database.Cursor;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
-import android.widget.ListView;
+import pl.pisze_czytam.bookinventory.data.BookstoreContract.*;
 
-import pl.pisze_czytam.bookinventory.data.BookContract.*;
-
-public class BooksCatalog extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    BookCursorAdapter bookCursorAdapter;
-    private static final int LOADER_ID = 0;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.books_catalog);
+        setContentView(R.layout.main_activity);
 
-        FloatingActionButton fab = findViewById(R.id.fab_add_book);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(BooksCatalog.this, BookEditor.class));
-            }
-        });
+        ViewPager viewPager = findViewById(R.id.viewpager);
+        CatalogAdapter adapter = new CatalogAdapter(getSupportFragmentManager(), this);
+        viewPager.setAdapter(adapter);
 
-        ListView listView = findViewById(R.id.listview);
-        View emptyView = findViewById(R.id.empty_view);
-        listView.setEmptyView(emptyView);
-        bookCursorAdapter = new BookCursorAdapter(this, null);
-        listView.setAdapter(bookCursorAdapter);
-        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent detailsIntent = new Intent(BooksCatalog.this, BookDetails.class);
-                Uri currentBookUri = ContentUris.withAppendedId(BookEntry.BOOKS_URI, id);
-                detailsIntent.setData(currentBookUri);
-                startActivity(detailsIntent);
-            }
-        });
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -74,10 +45,10 @@ public class BooksCatalog extends AppCompatActivity implements LoaderManager.Loa
                 insertDummySupplier();
                 return true;
             case R.id.add_books:
-                startActivity(new Intent(BooksCatalog.this, BookEditor.class));
+                startActivity(new Intent(MainActivity.this, BookEditor.class));
                 return true;
             case R.id.add_supplier:
-                startActivity(new Intent(BooksCatalog.this, SupplierEditor.class));
+                startActivity(new Intent(MainActivity.this, SupplierEditor.class));
                 return true;
             case R.id.delete_data:
                 showDeleteDialog();
@@ -115,7 +86,7 @@ public class BooksCatalog extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void showDeleteDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BooksCatalog.this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
         dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_all, null))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -132,24 +103,5 @@ public class BooksCatalog extends AppCompatActivity implements LoaderManager.Loa
             }
         });
         dialogBuilder.create().show();
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE,
-                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUP_PHONE};
-        return new CursorLoader(this, BookEntry.BOOKS_URI, bookProjection, null,
-                null, BookEntry.COLUMN_TITLE + " ASC");
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        bookCursorAdapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        bookCursorAdapter.swapCursor(null);
     }
 }

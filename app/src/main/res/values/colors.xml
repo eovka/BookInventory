@@ -8,4 +8,5 @@
     <color name="editorColorPrimaryDark">#333644</color>
     <color name="buttonColor">#bf333644</color>
     <color name="warningButton">#bfc65f63</color>
+    <color name="tabs_text">#ffffff</color>
 </resources>

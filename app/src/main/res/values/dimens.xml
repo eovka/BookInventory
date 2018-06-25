@@ -4,6 +4,7 @@
     <dimen name="title_text">18sp</dimen>
     <dimen name="dialog_title">20sp</dimen>
     <dimen name="plus_size">24sp</dimen>
+    <dimen name="tab_indicator">2dp</dimen>
     <dimen name="smaller_padding">8dp</dimen>
     <dimen name="standard_padding">16dp</dimen>
     <dimen name="double_padding">32dp</dimen>

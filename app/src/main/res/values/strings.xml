@@ -2,6 +2,8 @@
     <string name="app_name">Book Inventory</string>
     <string name="add_book">Add a book</string>
     <string name="add_supplier">Add a supplier</string>
+    <string name="books">Books</string>
+    <string name="suppliers">Suppliers</string>
     <string name="save">Save</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
@@ -42,6 +44,8 @@
     <string name="dummy_address">ul. Gadających Drzew 12, 56–879 Strzegom</string>
     <string name="phone">Phone</string>
     <string name="phone_format">+48123456789</string>
+    <string name="email">E-mail</string>
+    <string name="email_hint">example@example.com</string>
     <string name="call_supplier">Call the supplier</string>
     <string name="supplier_required">Name and phone number are required.</string>
     <string name="error_save_sup">Error with saving supplier.</string>
@@ -49,8 +53,10 @@
     <string name="sale">Sale</string>
     <string name="two_left">Only two books left. Consider ordering some.</string>
     <string name="order">Order</string>
-    <string name="empty_text_title">It\'s a bit empty here…</string>
-    <string name="empty_text_subtitle">Let\'s build a bookcase by adding some books.</string>
+    <string name="no_books_title">It\'s a bit empty here…</string>
+    <string name="no_books_subtitle">Let\'s build a bookcase by adding some books.</string>
+    <string name="no_suppliers_title">No suppliers on the list.</string>
+    <string name="no_suppliers_subtitle">Add some contacts to start doing business.</string>
     <string name="icon_description">a bookcase</string>
     <string name="edit_book">Edit book info</string>
     <string name="discard_quit">Discard your changes and quit editing?</string>

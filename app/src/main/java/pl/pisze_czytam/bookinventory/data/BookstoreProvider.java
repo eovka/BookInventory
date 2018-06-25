@@ -12,10 +12,10 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import pl.pisze_czytam.bookinventory.data.BookContract.*;
+import pl.pisze_czytam.bookinventory.data.BookstoreContract.*;
 
-public class BookProvider extends ContentProvider {
-    public static final String LOG_TAG = BookProvider.class.getSimpleName();
+public class BookstoreProvider extends ContentProvider {
+    public static final String LOG_TAG = BookstoreProvider.class.getSimpleName();
     private BookstoreDbHelper dbHelper;
     private static final int BOOKS = 10;
     private static final int BOOKS_ID = 11;
@@ -24,10 +24,10 @@ public class BookProvider extends ContentProvider {
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        uriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.BOOKS_PATH, BOOKS);
-        uriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.BOOKS_PATH + "/#", BOOKS_ID);
-        uriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.SUPPLIERS_PATH, SUPPLIERS);
-        uriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.SUPPLIERS_PATH + "/#", SUPPLIER_ID);
+        uriMatcher.addURI(BookstoreContract.CONTENT_AUTHORITY, BookstoreContract.BOOKS_PATH, BOOKS);
+        uriMatcher.addURI(BookstoreContract.CONTENT_AUTHORITY, BookstoreContract.BOOKS_PATH + "/#", BOOKS_ID);
+        uriMatcher.addURI(BookstoreContract.CONTENT_AUTHORITY, BookstoreContract.SUPPLIERS_PATH, SUPPLIERS);
+        uriMatcher.addURI(BookstoreContract.CONTENT_AUTHORITY, BookstoreContract.SUPPLIERS_PATH + "/#", SUPPLIER_ID);
     }
 
     @Override
