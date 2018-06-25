@@ -2,6 +2,7 @@ package pl.pisze_czytam.bookinventory;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.widget.CursorAdapter;
@@ -50,11 +51,11 @@ public class BookCursorAdapter extends CursorAdapter {
         } else {
             holder.quantityLabel.setTextColor(context.getApplicationContext().getResources().getColor(R.color.colorPrimaryDark));
             holder.quantityView.setTextColor(context.getApplicationContext().getResources().getColor(R.color.colorPrimaryDark));
-            holder.saleButton.setBackgroundColor(context.getApplicationContext().getResources().getColor(R.color.editorColorPrimary));
+            holder.saleButton.setBackgroundColor(context.getApplicationContext().getResources().getColor(R.color.buttonColor));
             holder.saleButton.setText(R.string.sale);
         }
         if (quantityInt <= 0) {
-            holder.saleButton.setBackgroundColor(context.getApplicationContext().getResources().getColor(R.color.colorAccent));
+            holder.saleButton.setBackgroundColor(context.getApplicationContext().getResources().getColor(R.color.warningButton));
             holder.saleButton.setText(R.string.order);
         }
 
@@ -63,6 +64,7 @@ public class BookCursorAdapter extends CursorAdapter {
         holder.quantityView.setText(quantityText);
 
         final String id = String.valueOf(cursor.getInt(cursor.getColumnIndex(BookEntry.ID)));
+        final String phone = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUP_PHONE));
 
         holder.saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,8 +81,9 @@ public class BookCursorAdapter extends CursorAdapter {
                         Toast.makeText(context.getApplicationContext(), context.getApplicationContext().getResources().getString(R.string.error_update_book), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    //todo: if order button stays, intent instead of this message (strunę wtedy też usunąć)
-                    Toast.makeText(context.getApplicationContext(), context.getApplicationContext().getResources().getString(R.string.cannot_sale), Toast.LENGTH_SHORT).show();
+                    Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                    dialIntent.setData(Uri.parse("tel:" + phone));
+                    context.startActivity(dialIntent);
                 }
             }
         });

@@ -28,7 +28,8 @@
             android:name=".BookEditor"
             android:label="@string/add_book"
             android:parentActivityName=".BooksCatalog"
-            android:theme="@style/EditorTheme">
+            android:theme="@style/EditorTheme"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".BooksCatalog" />

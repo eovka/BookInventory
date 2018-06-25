@@ -54,11 +54,7 @@
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/standard_padding"
-        android:src="@drawable/book_icon" />
+        android:id="@+id/fab_add_book"
+        style="@style/FabStyle"
+        android:src="@drawable/ic_book" />
 </RelativeLayout>

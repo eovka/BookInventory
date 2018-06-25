@@ -25,6 +25,7 @@
     <string name="minus">&#8212;</string>
     <string name="no_books">No books in the stock, cannot be less.</string>
     <string name="full_stock">The stock is full.</string>
+    <string name="quantity_updated">Quantity updated.</string>
     <string name="book_required">Book\'s title and supplier are required.</string>
     <string name="error_save_book">Error with saving book.</string>
     <string name="book_saved">Book saved.</string>
@@ -47,7 +48,6 @@
     <string name="supplier_saved">Supplier saved.</string>
     <string name="sale">Sale</string>
     <string name="two_left">Only two books left. Consider ordering some.</string>
-    <string name="cannot_sale">Cannot sell &#8212; no item in the stock.</string>
     <string name="order">Order</string>
     <string name="empty_text_title">It\'s a bit empty here…</string>
     <string name="empty_text_subtitle">Let\'s build a bookcase by adding some books.</string>

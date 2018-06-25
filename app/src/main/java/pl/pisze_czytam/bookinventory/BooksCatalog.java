@@ -32,7 +32,7 @@ public class BooksCatalog extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.books_catalog);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab_add_book);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +138,7 @@ public class BooksCatalog extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE,
-                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY};
+                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUP_PHONE};
         return new CursorLoader(this, BookEntry.BOOKS_URI, bookProjection, null,
                 null, BookEntry.COLUMN_TITLE + " ASC");
     }

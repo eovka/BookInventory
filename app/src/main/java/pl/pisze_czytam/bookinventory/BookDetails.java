@@ -1,7 +1,7 @@
 package pl.pisze_czytam.bookinventory;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,10 +23,12 @@ import android.widget.Toast;
 import pl.pisze_czytam.bookinventory.data.BookContract.BookEntry;
 import pl.pisze_czytam.bookinventory.databinding.BookDetailsBinding;
 
-public class BookDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+public class BookDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        View.OnClickListener {
     private BookDetailsBinding bind;
     Uri clickedBook;
     private static final int LOADER_ID = 1;
+    private boolean quantityChanged;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +42,8 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
 
         bind.plusButton.setOnClickListener(this);
         bind.minusButton.setOnClickListener(this);
-        // TODO jeszcze 2-3 buttony z nasłuchiwaczem (lub widoki do intentów)
+        bind.callButton.setOnClickListener(this);
+        bind.fabEditBook.setOnClickListener(this);
     }
 
     @Override
@@ -58,13 +63,16 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                checkIfChanged();
+                NavUtils.navigateUpFromSameTask(BookDetails.this);
+                return true;
             case R.id.action_edit:
-                Intent editorIntent = new Intent(BookDetails.this, BookEditor.class);
-                editorIntent.setData(clickedBook);
-                startActivity(editorIntent);
+                checkIfChanged();
+                goToEditor();
                 return true;
             case R.id.action_delete:
-                // TODO: alertdialog, if confirmed, delete item, go back to book catalog; cancel - dismiss
+                showDeleteDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -105,7 +113,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
         bind.bookTitle.setText(null);
         bind.bookAuthor.setText(null);
         bind.bookPrice.setText(null);
-        bind.bookQuantity.setText(String.valueOf(null));
+        bind.bookQuantity.setText(String.valueOf(0));
         bind.supplierName.setText(null);
         bind.supplierAddress.setText(null);
         bind.suppliersPhone.setText(null);
@@ -113,7 +121,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
 
     @Override
     public void onClick(View v) {
-        String[] projection = {BookEntry.ID, BookEntry.COLUMN_QUANTITY};
+        String[] projection = {BookEntry.ID, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUP_PHONE};
         Cursor cursor = getContentResolver().query(clickedBook, projection, null,
                 null, null, null);
         cursor.moveToFirst();
@@ -126,6 +134,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                     values.put(BookEntry.COLUMN_QUANTITY, quantity);
                     getContentResolver().update(clickedBook, values, null, null);
                     bind.bookQuantity.setText(String.valueOf(quantity));
+                    quantityChanged = true;
                     // TODO: kolorki ostrzegawcze?
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.no_books, Toast.LENGTH_SHORT).show();
@@ -139,12 +148,70 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                     values.put(BookEntry.COLUMN_QUANTITY, quantity);
                     getContentResolver().update(clickedBook, values, null, null);
                     bind.bookQuantity.setText(String.valueOf(quantity));
+                    quantityChanged = true;
                 }
                 if (quantity == 100) {
                     Toast.makeText(getApplicationContext(), R.string.full_stock, Toast.LENGTH_SHORT).show();
                 }
                 cursor.close();
                 break;
+            case R.id.call_button:
+                String phone = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUP_PHONE));
+                cursor.close();
+                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                dialIntent.setData(Uri.parse("tel:" + phone));
+                startActivity(dialIntent);
+                break;
+            case R.id.fab_edit_book:
+                checkIfChanged();
+                goToEditor();
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        checkIfChanged();
+        super.onBackPressed();
+    }
+
+    private void goToEditor() {
+        Intent editorIntent = new Intent(BookDetails.this, BookEditor.class);
+        editorIntent.setData(clickedBook);
+        startActivity(editorIntent);
+    }
+
+    private void showDeleteDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(BookDetails.this);
+        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_item, null))
+            .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteBook();
+                }
+            })
+            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                }
+            });
+        dialogBuilder.create().show();
+    }
+    private void deleteBook() {
+        int rowsDeleted = getContentResolver().delete(clickedBook, null, null);
+        if (rowsDeleted == 0) {
+            Toast.makeText(getApplicationContext(), R.string.error_delete_book, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.book_deleted, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+    private void checkIfChanged() {
+        if (quantityChanged) {
+            Toast.makeText(getApplicationContext(), R.string.quantity_updated, Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -35,13 +35,13 @@
         <item name="android:paddingTop">@dimen/standard_padding</item>
         <item name="android:paddingBottom">@dimen/standard_padding</item>
         <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textSize">@dimen/title_text</item>
+        <item name="android:textSize">@dimen/normal_text</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="EditorInserts">
         <item name="android:fontFamily">serif-monospace</item>
-        <item name="android:paddingTop">@dimen/standard_padding</item>
+        <item name="android:textSize">@dimen/title_text</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -80,9 +80,9 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:fontFamily">serif-monospace</item>
+        <item name="android:textSize">@dimen/title_text</item>
         <item name="android:paddingTop">@dimen/standard_padding</item>
         <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="DetailsInfo">
@@ -90,7 +90,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">2</item>
         <item name="android:fontFamily">serif-monospace</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/title_text</item>
     </style>
 
     <style name="ButtonsSmall">
@@ -101,5 +101,13 @@
         <item name="android:background">@color/buttonColor</item>
         <item name="android:textSize">@dimen/title_text</item>
         <item name="android:textColor">@color/colorBackground</item>
+    </style>
+
+    <style name="FabStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_margin">@dimen/standard_padding</item>
     </style>
 </resources>
