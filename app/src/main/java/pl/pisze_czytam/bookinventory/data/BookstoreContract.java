@@ -49,6 +49,7 @@ public final class BookstoreContract {
         public static final String ID = BaseColumns._ID;
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_ADDRESS = "address";
+        public static final String COLUMN_MAIL = "email";
         public static final String COLUMN_PHONE = "phone";
     }
 }

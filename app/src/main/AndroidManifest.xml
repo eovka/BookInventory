@@ -35,6 +35,14 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
+            android:name=".SupplierDetails"
+            android:label="@string/supplier_overview"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name=".SupplierEditor"
             android:label="@string/add_supplier"
             android:parentActivityName=".MainActivity"

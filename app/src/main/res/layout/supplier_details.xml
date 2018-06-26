@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+        tools:context=".SupplierDetails">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/standard_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/DetailsCategory"
+                        android:text="@string/supplier" />
+
+                    <TextView
+                        android:id="@+id/supplier_name"
+                        style="@style/DetailsInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        tools:text="@string/dummy_name" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/DetailsCategory"
+                        android:text="@string/address" />
+
+                    <TextView
+                        android:id="@+id/supplier_address"
+                        style="@style/DetailsInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:lines="3"
+                        android:maxLines="3"
+                        android:minLines="3"
+                        tools:text="@string/dummy_address" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/DetailsCategory"
+                        android:paddingBottom="@dimen/standard_padding"
+                        android:text="@string/email" />
+
+                    <TextView
+                        android:id="@+id/supplier_mail"
+                        style="@style/DetailsInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:drawablePadding="@dimen/smaller_padding"
+                        android:drawableStart="@drawable/ic_email"
+                        android:maxLines="2"
+                        tools:text="@string/email_hint" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/DetailsCategory"
+                        android:text="@string/phone" />
+
+                    <TextView
+                        android:id="@+id/supplier_phone"
+                        style="@style/DetailsInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:drawablePadding="@dimen/smaller_padding"
+                        android:drawableStart="@drawable/ic_phone_dark"
+                        tools:text="@string/phone_format" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_edit_supplier"
+            style="@style/FabStyle"
+            android:src="@drawable/ic_edit" />
+    </RelativeLayout>
+</layout>

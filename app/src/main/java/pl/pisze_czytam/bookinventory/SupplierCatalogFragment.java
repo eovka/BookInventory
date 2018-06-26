@@ -1,7 +1,9 @@
 package pl.pisze_czytam.bookinventory;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -54,10 +56,12 @@ public class SupplierCatalogFragment extends Fragment implements LoaderManager.L
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent detailsIntent = new Intent(getActivity(), SupplierDetails.class);
+                Uri currentSupplierUri = ContentUris.withAppendedId(SupplierEntry.SUPPLIERS_URI, id);
+                detailsIntent.setData(currentSupplierUri);
+                startActivity(detailsIntent);
             }
         });
-
         return rootView;
     }
 

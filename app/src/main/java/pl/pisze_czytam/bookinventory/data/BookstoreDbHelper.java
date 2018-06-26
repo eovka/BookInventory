@@ -3,6 +3,7 @@ package pl.pisze_czytam.bookinventory.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.speech.tts.TextToSpeech;
 
 import static pl.pisze_czytam.bookinventory.data.BookstoreContract.*;
 
@@ -35,6 +36,7 @@ public class BookstoreDbHelper extends SQLiteOpenHelper {
                 + SupplierEntry.ID + INTEGER_TYPE + " PRIMARY KEY" + " AUTOINCREMENT" + COMMA_SEP
                 + SupplierEntry.COLUMN_NAME + TEXT_TYPE + " NOT NULL" + COMMA_SEP
                 + SupplierEntry.COLUMN_ADDRESS + TEXT_TYPE + COMMA_SEP
+                + SupplierEntry.COLUMN_MAIL + TEXT_TYPE + COMMA_SEP
                 + SupplierEntry.COLUMN_PHONE + TEXT_TYPE + " NOT NULL" + ");";
 
         db.execSQL(SQL_CREATE_BOOKS);

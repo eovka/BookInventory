@@ -192,12 +192,16 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
         String title = bind.bookTitle.getText().toString().trim();
         String author = bind.bookAuthor.getText().toString().trim();
         String priceText = bind.bookPrice.getText().toString().trim();
-        String numberText = bind.booksQuantity.getText().toString().trim();
+        String quantity = bind.booksQuantity.getText().toString().trim();
         if (!priceText.isEmpty()) {
             bookPrice = Double.parseDouble(priceText);
         }
-        if (!numberText.isEmpty()) {
-            bookQuantity = Integer.parseInt(numberText);
+        if (!quantity.isEmpty()) {
+            bookQuantity = Integer.parseInt(quantity);
+        }
+        if (Integer.parseInt(quantity) > 100) {
+            Toast.makeText(getApplicationContext(), "Your limit for a book is 100 copies. Setting quantity to 100.", Toast.LENGTH_LONG).show();
+            bookQuantity = 100;
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put(BookEntry.COLUMN_TITLE, title);
@@ -233,6 +237,8 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
             } else {
                 Toast.makeText(getApplicationContext(), R.string.book_deleted, Toast.LENGTH_SHORT).show();
                 finish();
+                // finishing leaves a user in details activity, so go up:
+                NavUtils.navigateUpFromSameTask(this);
             }
         }
     }

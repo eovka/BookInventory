@@ -26,7 +26,9 @@
                     android:id="@+id/book_title"
                     style="@style/EditorInserts.Simple"
                     android:hint="@string/title"
-                    android:inputType="textCapSentences" />
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:lines="2"
+                    android:maxLines="2"/>
             </LinearLayout>
 
 
@@ -42,7 +44,7 @@
                     android:id="@+id/book_author"
                     style="@style/EditorInserts.Simple"
                     android:hint="@string/author"
-                    android:inputType="textCapWords"
+                    android:inputType="textCapWords|textMultiLine"
                     android:lines="2"
                     android:maxLines="2" />
             </LinearLayout>

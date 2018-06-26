@@ -27,7 +27,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
         View.OnClickListener {
     private BookDetailsBinding bind;
     Uri clickedBook;
-    private static final int LOADER_ID = 1;
+    private static final int LOADER_ID = 0;
     private boolean quantityChanged;
 
     @Override
@@ -36,9 +36,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
         bind = DataBindingUtil.setContentView(this, R.layout.book_details);
 
         clickedBook = getIntent().getData();
-        if (clickedBook != null) {
-            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-        }
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
         bind.plusButton.setOnClickListener(this);
         bind.minusButton.setOnClickListener(this);
@@ -163,6 +161,8 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                 startActivity(dialIntent);
                 break;
             case R.id.fab_edit_book:
+                // close cursor - it's not used here, but open after any click.
+                cursor.close();
                 checkIfChanged();
                 goToEditor();
                 break;
