@@ -36,7 +36,6 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
     private BookEditorBinding bind;
     private String supplier = BookEntry.SUPPLIER_UNKNOWN;
     private String telephone = BookEntry.PHONE_UNKNOWN;
-    private String address = BookEntry.ADDRESS_UNKNOWN;
     private double bookPrice = BookEntry.PRICE_DEFAULT;
     private int bookQuantity = BookEntry.NUMBER_DEFAULT;
     Uri clickedBook;
@@ -78,38 +77,28 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
     }
 
     public void setupSpinner() {
-        BookstoreDbHelper dbHelper = new BookstoreDbHelper(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] projection = {SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_PHONE, SupplierEntry.COLUMN_ADDRESS};
-        Cursor suppliersCursor = db.query(SupplierEntry.TABLE_NAME, projection, null, null,
+        String[] projection = {SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_PHONE};
+        Cursor suppliersCursor = getContentResolver().query(SupplierEntry.SUPPLIERS_URI, projection,
                 null, null, SupplierEntry.COLUMN_NAME + " ASC");
 
-        int nameColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_NAME);
-        int phoneColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_PHONE);
-        int addressColumnIndex = suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_ADDRESS);
-
         ArrayList<String> suppliersNames = new ArrayList<>();
-        // Build also phones and addresses lists to display them correctly after choosing supplier.
+        // Build also phone lists to display the number correctly after choosing supplier.
         final ArrayList<String> suppliersPhones = new ArrayList<>();
-        final ArrayList<String> suppliersAddresses = new ArrayList<>();
 
         while (suppliersCursor.moveToNext()) {
-            suppliersNames.add(suppliersCursor.getString(nameColumnIndex));
-            suppliersPhones.add(suppliersCursor.getString(phoneColumnIndex));
-            suppliersAddresses.add(suppliersCursor.getString(addressColumnIndex));
+            suppliersNames.add(suppliersCursor.getString(suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_NAME)));
+            suppliersPhones.add(suppliersCursor.getString(suppliersCursor.getColumnIndex(SupplierEntry.COLUMN_PHONE)));
         }
         suppliersCursor.close();
 
         if (suppliersNames.isEmpty()) {
             bind.spinnerSuppliers.setVisibility(View.GONE);
             bind.suppliersPhone.setVisibility(View.GONE);
-            bind.supplierAddress.setVisibility(View.GONE);
             bind.noSuppliersText.setVisibility(View.VISIBLE);
             bind.noSuppliersText.setText(R.string.no_suppliers);
         } else {
             bind.spinnerSuppliers.setVisibility(View.VISIBLE);
             bind.suppliersPhone.setVisibility(View.VISIBLE);
-            bind.supplierAddress.setVisibility(View.VISIBLE);
             bind.noSuppliersText.setVisibility(View.GONE);
             ArrayAdapter suppliersAdapter = new ArrayAdapter<>(this, R.layout.supplier_spinner, suppliersNames);
             bind.spinnerSuppliers.setAdapter(suppliersAdapter);
@@ -119,15 +108,12 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
                     supplier = (String) parent.getItemAtPosition(position);
                     telephone = suppliersPhones.get(position);
                     bind.suppliersPhone.setText(telephone);
-                    address = suppliersAddresses.get(position);
-                    bind.supplierAddress.setText(address);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     supplier = BookEntry.SUPPLIER_UNKNOWN;
                     telephone = BookEntry.PHONE_UNKNOWN;
-                    address = BookEntry.ADDRESS_UNKNOWN;
                 }
             });
         }
@@ -210,7 +196,6 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
         contentValues.put(BookEntry.COLUMN_QUANTITY, bookQuantity);
         contentValues.put(BookEntry.COLUMN_SUPPLIER, supplier);
         contentValues.put(BookEntry.COLUMN_SUP_PHONE, telephone);
-        contentValues.put(BookEntry.COLUMN_SUP_ADDRESS, address);
 
         if (clickedBook == null) {
             Uri newUri = getContentResolver().insert(BookEntry.BOOKS_URI, contentValues);
@@ -306,8 +291,7 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE, BookEntry.COLUMN_AUTHOR,
-                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER,
-                BookEntry.COLUMN_SUP_ADDRESS, BookEntry.COLUMN_SUP_PHONE};
+                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER, BookEntry.COLUMN_SUP_PHONE};
         return new CursorLoader(this, clickedBook, bookProjection, null, null, null);
     }
 

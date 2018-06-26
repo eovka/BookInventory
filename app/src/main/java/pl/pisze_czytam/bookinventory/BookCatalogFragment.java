@@ -15,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import pl.pisze_czytam.bookinventory.data.BookstoreContract.BookEntry;
 
@@ -37,6 +39,14 @@ public class BookCatalogFragment extends Fragment implements LoaderManager.Loade
                 startActivity(new Intent(getActivity(), BookEditor.class));
             }
         });
+
+        ImageView emptyImage = rootView.findViewById(R.id.empty_list_image);
+        TextView emptyTitleText = rootView.findViewById(R.id.empty_title_text);
+        TextView emptySubtitleText = rootView.findViewById(R.id.empty_subtitle_text);
+
+        emptyImage.setImageDrawable(getResources().getDrawable(R.drawable.bookcase));
+        emptyTitleText.setText(R.string.no_books_title);
+        emptySubtitleText.setText(R.string.no_books_subtitle);
 
         ListView listView = rootView.findViewById(R.id.listview);
         View emptyView = rootView.findViewById(R.id.empty_view);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
@@ -15,7 +16,8 @@
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:background="@color/colorBackground">
 
         <ImageView
             android:id="@+id/empty_list_image"
@@ -23,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/icon_description"
-            android:src="@drawable/bookcase" />
+            tools:src="@drawable/bookcase" />
 
         <TextView
             android:id="@+id/empty_title_text"
@@ -32,10 +34,10 @@
             android:layout_below="@+id/empty_list_image"
             android:layout_centerHorizontal="true"
             android:padding="@dimen/standard_padding"
-            android:text="@string/no_books_title"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/title_text"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="@string/no_books_title" />
 
         <TextView
             android:id="@+id/empty_subtitle_text"
@@ -45,10 +47,10 @@
             android:layout_centerHorizontal="true"
             android:paddingEnd="@dimen/standard_padding"
             android:paddingStart="@dimen/standard_padding"
-            android:text="@string/no_books_subtitle"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="@string/no_books_subtitle" />
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton

@@ -152,12 +152,6 @@
                             android:layout_height="wrap_content"
                             tools:text="@string/phone" />
 
-                        <TextView
-                            android:id="@+id/supplier_address"
-                            style="@style/DetailsInfo"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            tools:text="@string/address" />
                     </LinearLayout>
                 </LinearLayout>
 

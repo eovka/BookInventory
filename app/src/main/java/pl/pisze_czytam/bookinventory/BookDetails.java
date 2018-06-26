@@ -80,8 +80,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE, BookEntry.COLUMN_AUTHOR,
-                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER,
-                BookEntry.COLUMN_SUP_ADDRESS, BookEntry.COLUMN_SUP_PHONE};
+                BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER, BookEntry.COLUMN_SUP_PHONE};
         return new CursorLoader(this, clickedBook, bookProjection, null, null, null);
     }
 
@@ -93,7 +92,6 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
             double price = cursor.getDouble(cursor.getColumnIndex(BookEntry.COLUMN_PRICE));
             int quantity = cursor.getInt(cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY));
             String supplier = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER));
-            String address = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUP_ADDRESS));
             String phone = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUP_PHONE));
 
             bind.bookTitle.setText(title);
@@ -101,7 +99,6 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
             bind.bookPrice.setText(String.valueOf(price));
             bind.bookQuantity.setText(String.valueOf(quantity));
             bind.supplierName.setText(supplier);
-            bind.supplierAddress.setText(address);
             bind.suppliersPhone.setText(phone);
         }
     }
@@ -113,7 +110,6 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
         bind.bookPrice.setText(null);
         bind.bookQuantity.setText(String.valueOf(0));
         bind.supplierName.setText(null);
-        bind.supplierAddress.setText(null);
         bind.suppliersPhone.setText(null);
     }
 
@@ -133,7 +129,6 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                     getContentResolver().update(clickedBook, values, null, null);
                     bind.bookQuantity.setText(String.valueOf(quantity));
                     quantityChanged = true;
-                    // TODO: kolorki ostrzegawcze?
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.no_books, Toast.LENGTH_SHORT).show();
                 }

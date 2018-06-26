@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_QUANTITY, 7);
         values.put(BookEntry.COLUMN_SUPPLIER, "Znak");
         values.put(BookEntry.COLUMN_SUP_PHONE, "+48126199500");
-        values.put(BookEntry.COLUMN_SUP_ADDRESS, "ul. Kościuszki 37, 30-105 Kraków");
         getContentResolver().insert(BookEntry.BOOKS_URI, values);
     }
 
@@ -81,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(SupplierEntry.COLUMN_NAME, "Znak");
         values.put(SupplierEntry.COLUMN_ADDRESS, "ul. Kościuszki 37, 30-105 Kraków");
+        values.put(SupplierEntry.COLUMN_MAIL, "znak@znak.com.pl");
         values.put(SupplierEntry.COLUMN_PHONE, "+48126199500");
         getContentResolver().insert(SupplierEntry.SUPPLIERS_URI, values);
     }

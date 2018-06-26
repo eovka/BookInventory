@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import pl.pisze_czytam.bookinventory.data.BookstoreContract.SupplierEntry;
@@ -38,7 +39,6 @@ public class SupplierCatalogFragment extends Fragment implements LoaderManager.L
             }
         });
 
-        // change default image and texts when list is empty
         ImageView emptyImage = rootView.findViewById(R.id.empty_list_image);
         TextView emptyTitleText = rootView.findViewById(R.id.empty_title_text);
         TextView emptySubtitleText = rootView.findViewById(R.id.empty_subtitle_text);
@@ -76,6 +76,7 @@ public class SupplierCatalogFragment extends Fragment implements LoaderManager.L
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         supplierCursorAdapter.swapCursor(data);
+
     }
 
     @Override
