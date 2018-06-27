@@ -1,11 +1,13 @@
 package pl.pisze_czytam.bookinventory;
 
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -17,16 +19,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import pl.pisze_czytam.bookinventory.data.BookstoreContract.SupplierEntry;
+import pl.pisze_czytam.bookinventory.data.BookstoreContract.*;
 import pl.pisze_czytam.bookinventory.databinding.SupplierDetailsBinding;
 
 public class SupplierDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
     private SupplierDetailsBinding bind;
     Uri clickedSupplier;
+    private TitleCursorAdapter titleCursorAdapter;
     private static final int LOADER_ID = 0;
+    private static final int TITLE_LOADER_ID = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +40,20 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
 
         clickedSupplier = getIntent().getData();
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+
+        titleCursorAdapter = new TitleCursorAdapter(getApplicationContext(), null);
+        bind.bookList.setAdapter(titleCursorAdapter);
+        getSupportLoaderManager().initLoader(TITLE_LOADER_ID, null, this);
+
+        bind.bookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent detailsIntent = new Intent(SupplierDetails.this, BookDetails.class);
+                Uri currentBookUri = ContentUris.withAppendedId(BookEntry.BOOKS_URI, id);
+                detailsIntent.setData(currentBookUri);
+                startActivity(detailsIntent);
+            }
+        });
 
         bind.fabEditSupplier.setOnClickListener(this);
         bind.supplierMail.setOnClickListener(this);
@@ -74,40 +93,69 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] supplierProjection = {SupplierEntry.ID, SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_ADDRESS,
-                SupplierEntry.COLUMN_MAIL, SupplierEntry.COLUMN_PHONE};
-        return new CursorLoader(this, clickedSupplier, supplierProjection, null, null, null);
+        switch (id) {
+            case LOADER_ID:
+                String[] supplierProjection = {SupplierEntry.ID, SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_ADDRESS,
+                        SupplierEntry.COLUMN_MAIL, SupplierEntry.COLUMN_PHONE};
+                return new CursorLoader(this, clickedSupplier, supplierProjection, null, null, null);
+            case TITLE_LOADER_ID:
+                String[] nameProjection = {SupplierEntry.ID, SupplierEntry.COLUMN_NAME};
+                Cursor cursor = getContentResolver().query(clickedSupplier, nameProjection, null, null, null);
+                cursor.moveToFirst();
+                String currentSupplier = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_NAME));
+                cursor.close();
+
+                String[] titleProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE, BookEntry.COLUMN_SUPPLIER};
+                String selection = BookEntry.COLUMN_SUPPLIER + "=?";
+                String[] selectionArgs = {currentSupplier};
+                return new CursorLoader(this, BookEntry.BOOKS_URI, titleProjection, selection, selectionArgs, BookEntry.COLUMN_TITLE + " ASC");
+            default: return null;
+        }
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (cursor.moveToFirst()) {
-            String name = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_NAME));
-            String address = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_ADDRESS));
-            String email = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_MAIL));
-            String phone = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_PHONE));
+        switch (loader.getId()) {
+            case LOADER_ID:
+                if (cursor.moveToFirst()) {
+                    String name = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_NAME));
+                    String address = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_ADDRESS));
+                    String email = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_MAIL));
+                    String phone = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_PHONE));
 
-            if (TextUtils.isEmpty(email)) {
-                email = getString(R.string.empty_data);
-            } else {
-                email = email.replace("@", " @");
-            }
-            if (TextUtils.isEmpty(address)) {
-                address = getString(R.string.empty_data);
-            }
-            bind.supplierName.setText(name);
-            bind.supplierAddress.setText(address);
-            bind.supplierMail.setText(email);
-            bind.supplierPhone.setText(phone);
+                    if (TextUtils.isEmpty(email)) {
+                        email = getString(R.string.empty_data);
+                    } else {
+                        email = email.replace("@", " @");
+                    }
+                    if (TextUtils.isEmpty(address)) {
+                        address = getString(R.string.empty_data);
+                    }
+                    bind.supplierName.setText(name);
+                    bind.supplierAddress.setText(address);
+                    bind.supplierMail.setText(email);
+                    bind.supplierPhone.setText(phone);
+                }
+                break;
+            case TITLE_LOADER_ID:
+                titleCursorAdapter.swapCursor(cursor);
+                break;
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        bind.supplierName.setText(null);
-        bind.supplierAddress.setText(null);
-        bind.supplierMail.setText(null);
-        bind.supplierPhone.setText(null);
+        switch (loader.getId()) {
+            case LOADER_ID:
+                bind.supplierName.setText(null);
+                bind.supplierAddress.setText(null);
+                bind.supplierMail.setText(null);
+                bind.supplierPhone.setText(null);
+                break;
+            case TITLE_LOADER_ID:
+                titleCursorAdapter.swapCursor(null);
+                break;
+        }
     }
 
     @Override
@@ -170,6 +218,7 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
                 });
         dialogBuilder.create().show();
     }
+
     private void deleteSupplier() {
         int rowsDeleted = getContentResolver().delete(clickedSupplier, null, null);
         if (rowsDeleted == 0) {
@@ -179,6 +228,7 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
             finish();
         }
     }
+
     private void createToast(String toastText) {
         View toastLayout = getLayoutInflater().inflate(R.layout.custom_toast,
                 (ViewGroup) findViewById(R.id.custom_toast_container));

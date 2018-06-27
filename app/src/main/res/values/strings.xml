@@ -48,6 +48,7 @@
     <string name="phone_format">+48123456789</string>
     <string name="email">E-mail</string>
     <string name="email_hint">example@example.com</string>
+    <string name="suppliers_books">Supplier\'s books</string>
     <string name="cannot_email">E-mail unknown, cannot write to supplier.</string>
     <string name="call_supplier">Call the supplier</string>
     <string name="supplier_required">Name and phone number are required.</string>

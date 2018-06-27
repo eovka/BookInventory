@@ -8,95 +8,108 @@
         android:background="@color/colorBackground"
         tools:context=".SupplierDetails">
 
-        <ScrollView
+        <LinearLayout
+            android:id="@+id/supplier_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/standard_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/standard_padding">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <TextView
+                    style="@style/DetailsCategory"
+                    android:text="@string/supplier" />
 
-                    <TextView
-                        style="@style/DetailsCategory"
-                        android:text="@string/supplier" />
-
-                    <TextView
-                        android:id="@+id/supplier_name"
-                        style="@style/DetailsInfo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        tools:text="@string/dummy_name" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        style="@style/DetailsCategory"
-                        android:text="@string/address" />
-
-                    <TextView
-                        android:id="@+id/supplier_address"
-                        style="@style/DetailsInfo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:lines="3"
-                        android:maxLines="3"
-                        android:minLines="3"
-                        tools:text="@string/dummy_address" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        style="@style/DetailsCategory"
-                        android:paddingBottom="@dimen/standard_padding"
-                        android:text="@string/email" />
-
-                    <TextView
-                        android:id="@+id/supplier_mail"
-                        style="@style/DetailsInfo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="2"
-                        android:drawablePadding="@dimen/smaller_padding"
-                        android:drawableStart="@drawable/ic_email"
-                        android:maxLines="2"
-                        tools:text="@string/email_hint" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        style="@style/DetailsCategory"
-                        android:text="@string/phone" />
-
-                    <TextView
-                        android:id="@+id/supplier_phone"
-                        style="@style/DetailsInfo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:drawablePadding="@dimen/smaller_padding"
-                        android:drawableStart="@drawable/ic_phone_dark"
-                        tools:text="@string/phone_format" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/supplier_name"
+                    style="@style/DetailsInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    tools:text="@string/dummy_name" />
             </LinearLayout>
-        </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/DetailsCategory"
+                    android:text="@string/address" />
+
+                <TextView
+                    android:id="@+id/supplier_address"
+                    style="@style/DetailsInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:lines="3"
+                    android:maxLines="3"
+                    android:minLines="3"
+                    tools:text="@string/dummy_address" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/DetailsCategory"
+                    android:paddingBottom="@dimen/standard_padding"
+                    android:text="@string/email" />
+
+                <TextView
+                    android:id="@+id/supplier_mail"
+                    style="@style/DetailsInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="2"
+                    android:drawablePadding="@dimen/smaller_padding"
+                    android:drawableStart="@drawable/ic_email"
+                    android:maxLines="2"
+                    tools:text="@string/email_hint" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/DetailsCategory"
+                    android:text="@string/phone" />
+
+                <TextView
+                    android:id="@+id/supplier_phone"
+                    style="@style/DetailsInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:drawablePadding="@dimen/smaller_padding"
+                    android:drawableStart="@drawable/ic_phone_dark"
+                    tools:text="@string/phone_format" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            style="@style/DetailsCategory"
+            android:id="@+id/list_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/supplier_container"
+            android:padding="@dimen/standard_padding"
+            android:text="@string/suppliers_books" />
+
+        <ListView
+            android:id="@+id/book_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/list_title"
+            android:paddingEnd="@dimen/standard_padding"
+            android:paddingStart="@dimen/standard_padding" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_edit_supplier"
