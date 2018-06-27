@@ -15,10 +15,13 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import pl.pisze_czytam.bookinventory.data.BookstoreContract.*;
@@ -93,7 +96,7 @@ public class SupplierEditor extends AppCompatActivity implements LoaderManager.L
                 String name = bind.supplierName.getText().toString().trim();
                 String phone = bind.supplierPhone.getText().toString().trim();
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone)) {
-                    Toast.makeText(getApplicationContext(), R.string.supplier_required, Toast.LENGTH_SHORT).show();
+                    createToast(getString(R.string.supplier_required));
                     return true;
                 }
                 saveSupplier();
@@ -106,82 +109,6 @@ public class SupplierEditor extends AppCompatActivity implements LoaderManager.L
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveSupplier() {
-        String name = bind.supplierName.getText().toString().trim();
-        String address = bind.supplierAddress.getText().toString().trim();
-        String mail = bind.supplierMail.getText().toString().trim();
-        String phone = bind.supplierPhone.getText().toString().trim();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(SupplierEntry.COLUMN_NAME, name);
-        contentValues.put(SupplierEntry.COLUMN_ADDRESS, address);
-        contentValues.put(SupplierEntry.COLUMN_MAIL, mail);
-        contentValues.put(SupplierEntry.COLUMN_PHONE, phone);
-
-        if (clickedSupplier == null) {
-            Uri newUri = getContentResolver().insert(SupplierEntry.SUPPLIERS_URI, contentValues);
-            if (newUri == null) {
-                Toast.makeText(getApplicationContext(), getString(R.string.error_save_sup), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.supplier_saved), Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            long rowsAffected = getContentResolver().update(clickedSupplier, contentValues, null, null);
-            if (rowsAffected == 0) {
-                Toast.makeText(getApplicationContext(), getString(R.string.error_update_sup), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.supplier_updated), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void showDeleteDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SupplierEditor.this);
-        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_item, null))
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteSupplier();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (dialog != null) {
-                            dialog.dismiss();
-                        }
-                    }
-                });
-        dialogBuilder.create().show();
-    }
-
-    private void deleteSupplier() {
-        if (clickedSupplier != null) {
-            int rowsDelete = getContentResolver().delete(clickedSupplier, null, null);
-            if (rowsDelete == 0) {
-                Toast.makeText(getApplicationContext(), R.string.error_delete_sup, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.supplier_deleted, Toast.LENGTH_SHORT).show();
-                finish();
-                NavUtils.navigateUpFromSameTask(this);
-            }
-        }
-    }
-
-    private void showUnsavedDialog(DialogInterface.OnClickListener discardClickListener) {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SupplierEditor.this);
-        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_unsaved, null))
-                .setPositiveButton(R.string.discard, discardClickListener)
-                .setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (dialog != null) {
-                            dialog.dismiss();
-                        }
-                    }
-                });
-        dialogBuilder.create().show();
-    }
 
     @Override
     public void onBackPressed() {
@@ -227,5 +154,93 @@ public class SupplierEditor extends AppCompatActivity implements LoaderManager.L
         bind.supplierAddress.setText(null);
         bind.supplierMail.setText(null);
         bind.supplierPhone.setText(null);
+    }
+
+    private void saveSupplier() {
+        String name = bind.supplierName.getText().toString().trim();
+        String address = bind.supplierAddress.getText().toString().trim();
+        String mail = bind.supplierMail.getText().toString().trim();
+        String phone = bind.supplierPhone.getText().toString().trim();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SupplierEntry.COLUMN_NAME, name);
+        contentValues.put(SupplierEntry.COLUMN_ADDRESS, address);
+        contentValues.put(SupplierEntry.COLUMN_MAIL, mail);
+        contentValues.put(SupplierEntry.COLUMN_PHONE, phone);
+
+        if (clickedSupplier == null) {
+            Uri newUri = getContentResolver().insert(SupplierEntry.SUPPLIERS_URI, contentValues);
+            if (newUri == null) {
+                createToast(getString(R.string.error_save_sup));
+            } else {
+                createToast(getString(R.string.supplier_saved));
+            }
+        } else {
+            long rowsAffected = getContentResolver().update(clickedSupplier, contentValues, null, null);
+            if (rowsAffected == 0) {
+                createToast(getString(R.string.error_update_sup));
+            } else {
+                createToast(getString(R.string.supplier_updated));
+            }
+        }
+    }
+
+    private void showDeleteDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SupplierEditor.this);
+        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_delete_item, null))
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteSupplier();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+        dialogBuilder.create().show();
+    }
+
+    private void deleteSupplier() {
+        if (clickedSupplier != null) {
+            int rowsDelete = getContentResolver().delete(clickedSupplier, null, null);
+            if (rowsDelete == 0) {
+                createToast(getString(R.string.error_delete_sup));
+            } else {
+                createToast(getString(R.string.supplier_deleted));
+                finish();
+                NavUtils.navigateUpFromSameTask(this);
+            }
+        }
+    }
+
+    private void showUnsavedDialog(DialogInterface.OnClickListener discardClickListener) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SupplierEditor.this);
+        dialogBuilder.setView(getLayoutInflater().inflate(R.layout.dialog_unsaved, null))
+                .setPositiveButton(R.string.discard, discardClickListener)
+                .setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+        dialogBuilder.create().show();
+    }
+
+    private void createToast(String toastText) {
+        View toastLayout = getLayoutInflater().inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+        TextView textView = toastLayout.findViewById(R.id.toast_text);
+        textView.setText(toastText);
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(toastLayout);
+        toast.show();
     }
 }

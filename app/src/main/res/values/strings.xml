@@ -27,6 +27,7 @@
     <string name="minus">&#8212;</string>
     <string name="no_books">No books in the stock, cannot be less.</string>
     <string name="full_stock">The stock is full.</string>
+    <string name="book_limit">Your limit is 100 copies. Setting quantity to 100.</string>
     <string name="quantity_updated">Quantity updated.</string>
     <string name="book_required">Book\'s title and supplier are required.</string>
     <string name="book_saved">Book saved.</string>

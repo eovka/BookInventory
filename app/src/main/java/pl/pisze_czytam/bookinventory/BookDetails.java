@@ -18,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import pl.pisze_czytam.bookinventory.data.BookstoreContract.BookEntry;
@@ -130,7 +132,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                     bind.bookQuantity.setText(String.valueOf(quantity));
                     quantityChanged = true;
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.no_books, Toast.LENGTH_SHORT).show();
+                    createToast(getString(R.string.no_books));
                 }
                 cursor.close();
                 break;
@@ -144,7 +146,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                     quantityChanged = true;
                 }
                 if (quantity == 100) {
-                    Toast.makeText(getApplicationContext(), R.string.full_stock, Toast.LENGTH_SHORT).show();
+                    createToast(getString(R.string.full_stock));
                 }
                 cursor.close();
                 break;
@@ -198,15 +200,25 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
     private void deleteBook() {
         int rowsDeleted = getContentResolver().delete(clickedBook, null, null);
         if (rowsDeleted == 0) {
-            Toast.makeText(getApplicationContext(), R.string.error_delete_book, Toast.LENGTH_SHORT).show();
+            createToast(getString(R.string.error_delete_book));
         } else {
-            Toast.makeText(getApplicationContext(), R.string.book_deleted, Toast.LENGTH_SHORT).show();
+            createToast(getString(R.string.book_deleted));
             finish();
         }
     }
     private void checkIfChanged() {
         if (quantityChanged) {
-            Toast.makeText(getApplicationContext(), R.string.quantity_updated, Toast.LENGTH_SHORT).show();
+            createToast(getString(R.string.quantity_updated));
         }
+    }
+    private void createToast(String toastText) {
+        View toastLayout = getLayoutInflater().inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+        TextView textView = toastLayout.findViewById(R.id.toast_text);
+        textView.setText(toastText);
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(toastLayout);
+        toast.show();
     }
 }

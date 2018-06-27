@@ -31,7 +31,7 @@ public class BookCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, final Context context, final Cursor cursor) {
+    public void bindView(final View view, final Context context, final Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
 
         String title = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_TITLE));
@@ -74,11 +74,29 @@ public class BookCursorAdapter extends CursorAdapter {
                     ContentValues values = new ContentValues();
                     values.put(BookEntry.COLUMN_QUANTITY, quantityInt - 1);
                         if (quantityInt == 3) {
-                            Toast.makeText(context.getApplicationContext(), context.getApplicationContext().getResources().getString(R.string.two_left), Toast.LENGTH_LONG).show();
+                            String toastText = context.getApplicationContext().getResources().getString(R.string.two_left);
+
+                            View toastLayout = LayoutInflater.from(mContext).inflate(R.layout.custom_toast,
+                                    (ViewGroup) view.findViewById(R.id.custom_toast_container));
+                            TextView textView = toastLayout.findViewById(R.id.toast_text);
+                            textView.setText(toastText);
+                            Toast toast = new Toast(context.getApplicationContext());
+                            toast.setDuration(Toast.LENGTH_LONG);
+                            toast.setView(toastLayout);
+                            toast.show();
                         }
                     int rowsAffected = context.getContentResolver().update(currentBookUri, values, null, null);
                     if (rowsAffected == 0) {
-                        Toast.makeText(context.getApplicationContext(), context.getApplicationContext().getResources().getString(R.string.error_update_book), Toast.LENGTH_SHORT).show();
+                        String toastText = context.getApplicationContext().getResources().getString(R.string.error_update_book);
+
+                        View toastLayout = LayoutInflater.from(mContext).inflate(R.layout.custom_toast,
+                                (ViewGroup) view.findViewById(R.id.custom_toast_container));
+                        TextView textView = toastLayout.findViewById(R.id.toast_text);
+                        textView.setText(toastText);
+                        Toast toast = new Toast(context.getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(toastLayout);
+                        toast.show();
                     }
                 } else {
                     Intent dialIntent = new Intent(Intent.ACTION_DIAL);
@@ -102,7 +120,6 @@ public class BookCursorAdapter extends CursorAdapter {
             quantityLabel = view.findViewById(R.id.quantity_label);
             quantityView = view.findViewById(R.id.quantity_view);
             saleButton = view.findViewById(R.id.sale_button);
-
         }
     }
 }

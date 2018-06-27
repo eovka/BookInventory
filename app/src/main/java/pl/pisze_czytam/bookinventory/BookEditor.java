@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,15 +20,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import pl.pisze_czytam.bookinventory.data.BookstoreContract.*;
-import pl.pisze_czytam.bookinventory.data.BookstoreDbHelper;
 import pl.pisze_czytam.bookinventory.databinding.BookEditorBinding;
 
 public class BookEditor extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -161,7 +161,7 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
                     supplierName = bind.spinnerSuppliers.getSelectedItem().toString();
                 }
                 if (TextUtils.isEmpty(title) || TextUtils.isEmpty(supplierName)) {
-                    Toast.makeText(getApplicationContext(), R.string.book_required, Toast.LENGTH_SHORT).show();
+                    createToast(getString(R.string.book_required));
                     return true;
                 }
                 saveBook();
@@ -186,7 +186,7 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
             bookQuantity = Integer.parseInt(quantity);
         }
         if (Integer.parseInt(quantity) > 100) {
-            Toast.makeText(getApplicationContext(), "Your limit for a book is 100 copies. Setting quantity to 100.", Toast.LENGTH_LONG).show();
+            createToast(getString(R.string.book_limit));
             bookQuantity = 100;
         }
         ContentValues contentValues = new ContentValues();
@@ -200,16 +200,16 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
         if (clickedBook == null) {
             Uri newUri = getContentResolver().insert(BookEntry.BOOKS_URI, contentValues);
             if (newUri == null) {
-                Toast.makeText(getApplicationContext(), getString(R.string.error_save_book), Toast.LENGTH_SHORT).show();
+                createToast(getString(R.string.error_save_book));
             } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.book_saved), Toast.LENGTH_SHORT).show();
+                createToast(getString(R.string.book_saved));
             }
         } else {
             long rowsAffected = getContentResolver().update(clickedBook, contentValues, null, null);
             if (rowsAffected == 0) {
-                Toast.makeText(getApplicationContext(), getString(R.string.error_update_book), Toast.LENGTH_SHORT).show();
+                createToast(getString(R.string.error_update_book));
             } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.book_updated), Toast.LENGTH_SHORT).show();
+                createToast(getString(R.string.book_updated));
             }
         }
     }
@@ -218,9 +218,9 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
         if (clickedBook != null) {
             int rowsDelete = getContentResolver().delete(clickedBook, null, null);
             if (rowsDelete == 0) {
-                Toast.makeText(getApplicationContext(), R.string.error_delete_book, Toast.LENGTH_SHORT).show();
+                createToast(getString(R.string.error_delete_book));
             } else {
-                Toast.makeText(getApplicationContext(), R.string.book_deleted, Toast.LENGTH_SHORT).show();
+                createToast(getString(R.string.book_deleted));
                 finish();
                 // finishing leaves a user in details activity, so go up:
                 NavUtils.navigateUpFromSameTask(this);
@@ -329,5 +329,15 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
             }
         }
         return 0;
+    }
+    private void createToast(String toastText) {
+        View toastLayout = getLayoutInflater().inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+        TextView textView = toastLayout.findViewById(R.id.toast_text);
+        textView.setText(toastText);
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(toastLayout);
+        toast.show();
     }
 }
