@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Book Inventory</string>
     <string name="add_book">Add a book</string>
     <string name="add_supplier">Add a supplier</string>
@@ -26,8 +26,8 @@
     <string name="plus">+</string>
     <string name="minus">&#8212;</string>
     <string name="no_books">No books in the stock, cannot be less.</string>
-    <string name="full_stock">The stock is full.</string>
-    <string name="book_limit">Your limit is 100 copies. Setting quantity to 100.</string>
+    <string name="full_stock">The stock is full. Your limit is <xliff:g example="2" id="number">%d</xliff:g>.</string>
+    <string name="book_limit">Your limit is <xliff:g example="2" id="number">%d</xliff:g> copies. Setting quantity to <xliff:g example="2" id="number">%d</xliff:g>.</string>
     <string name="quantity_updated">Quantity updated.</string>
     <string name="book_required">Book\'s title and supplier are required.</string>
     <string name="book_saved">Book saved.</string>
@@ -59,7 +59,7 @@
     <string name="error_update_sup">Error with updating supplier.</string>
     <string name="error_delete_sup">Error with deleting supplier.</string>
     <string name="sale">Sale</string>
-    <string name="two_left">Only 2 books left. Consider ordering some.</string>
+    <string name="books_left">Only <xliff:g example="2" id="number">%d</xliff:g> books left. Consider ordering some.</string>
     <string name="order">Order</string>
     <string name="no_books_title">It\'s a bit empty here…</string>
     <string name="no_books_subtitle">Let\'s build a bookcase by adding some books.</string>
@@ -73,4 +73,19 @@
     <string name="delete_item">Delete this position from the catalog?</string>
     <string name="book_order">Book order</string>
     <string name="empty_data">----------</string>
+    <string name="settings">Settings</string>
+    <string name="inventory_settings">Inventory Settings</string>
+    <string name="warn_number_label">Warn me when copies decrease to</string>
+    <string name="warn_number_default">2</string>
+    <string name="warn_number_key" translatable="false">warning_number</string>
+    <string name="max_stock_label">Maximum copies of a book</string>
+    <string name="max_stock_default">100</string>
+    <string name="max_stock_key" translatable="false">max_number</string>
+    <string name="sort_books_label">Sort books</string>
+    <string name="sort_books_default">@string/sort_alphabetically_value</string>
+    <string name="sort_books_key" translatable="false">order_books</string>
+    <string name="sort_alphabetically_label">Alphabetically</string>
+    <string name="sort_alphabetically_value" translatable="false">alphabetically</string>
+    <string name="sort_by_time_label">By time added</string>
+    <string name="sort_by_time_value" translatable="false">by_time</string>
 </resources>

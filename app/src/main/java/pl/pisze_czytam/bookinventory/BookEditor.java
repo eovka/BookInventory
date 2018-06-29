@@ -1,6 +1,9 @@
 package pl.pisze_czytam.bookinventory;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.content.ContentValues;
@@ -133,7 +136,7 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editor_menu, menu);
+        getMenuInflater().inflate(R.menu.details_menu, menu);
         return true;
     }
 
@@ -174,6 +177,7 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("StringFormatInvalid")
     private void saveBook() {
         String title = bind.bookTitle.getText().toString().trim();
         String author = bind.bookAuthor.getText().toString().trim();
@@ -185,9 +189,11 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
         if (!quantity.isEmpty()) {
             bookQuantity = Integer.parseInt(quantity);
         }
-        if (Integer.parseInt(quantity) > 100) {
-            createToast(getString(R.string.book_limit));
-            bookQuantity = 100;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int maxInStock = Integer.parseInt(sharedPreferences.getString(getString(R.string.max_stock_key), "100"));
+        if (Integer.parseInt(quantity) > maxInStock) {
+            createToast(getString(R.string.book_limit, maxInStock));
+            bookQuantity = maxInStock;
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put(BookEntry.COLUMN_TITLE, title);

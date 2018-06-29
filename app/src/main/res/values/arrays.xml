@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sorting_labels">
+        <item>@string/sort_alphabetically_label</item>
+        <item>@string/sort_by_time_label</item>
+    </string-array>
+    <string-array name="sorting_keys">
+        <item>@string/sort_alphabetically_value</item>
+        <item>@string/sort_by_time_value</item>
+    </string-array>
+    <string-array name="preferences_keys">
+        <item>@string/warn_number_key</item>
+        <item>@string/max_stock_key</item>
+        <item>@string/sort_books_key</item>
+    </string-array>
+</resources>

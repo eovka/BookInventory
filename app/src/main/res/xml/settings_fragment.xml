@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="@string/inventory_settings">
+    <EditTextPreference
+        android:defaultValue="@string/warn_number_default"
+        android:inputType="numberDecimal"
+        android:key="@string/warn_number_key"
+        android:selectAllOnFocus="true"
+        android:title="@string/warn_number_label" />
+
+    <EditTextPreference
+        android:defaultValue="@string/max_stock_default"
+        android:inputType="numberDecimal"
+        android:key="@string/max_stock_key"
+        android:selectAllOnFocus="true"
+        android:title="@string/max_stock_label" />
+
+    <ListPreference
+        android:defaultValue="@string/sort_books_default"
+        android:entries="@array/sorting_labels"
+        android:entryValues="@array/sorting_keys"
+        android:key="@string/sort_books_key"
+        android:title="@string/sort_books_label" />
+
+</PreferenceScreen>

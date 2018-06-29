@@ -2,9 +2,11 @@ package pl.pisze_czytam.bookinventory;
 
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -70,10 +72,16 @@ public class BookCatalogFragment extends Fragment implements LoaderManager.Loade
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String orderBy = sharedPreferences.getString(getString(R.string.sort_books_key), getString(R.string.sort_books_default));
+        String sortOrder = null;
+        if (orderBy.equals(getString(R.string.sort_alphabetically_value))) {
+            sortOrder = BookEntry.COLUMN_TITLE + " ASC";
+        }
         String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE,
                 BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUP_PHONE};
         return new CursorLoader(getActivity(), BookEntry.BOOKS_URI, bookProjection, null,
-                null, BookEntry.COLUMN_TITLE + " ASC");
+                null, sortOrder);
     }
 
     @Override

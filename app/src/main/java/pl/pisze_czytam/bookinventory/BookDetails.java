@@ -1,12 +1,15 @@
 package pl.pisze_czytam.bookinventory;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -56,7 +59,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editor_menu, menu);
+        getMenuInflater().inflate(R.menu.details_menu, menu);
         return true;
     }
 
@@ -115,6 +118,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
         bind.suppliersPhone.setText(null);
     }
 
+    @SuppressLint("StringFormatInvalid")
     @Override
     public void onClick(View v) {
         String[] projection = {BookEntry.ID, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUP_PHONE};
@@ -137,7 +141,9 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                 cursor.close();
                 break;
             case R.id.plus_button:
-                if (quantity < 100) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                int maxInStock = Integer.parseInt(sharedPreferences.getString(getString(R.string.max_stock_key), "100"));
+                if (quantity < maxInStock) {
                     quantity++;
                     ContentValues values = new ContentValues();
                     values.put(BookEntry.COLUMN_QUANTITY, quantity);
@@ -145,8 +151,8 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                     bind.bookQuantity.setText(String.valueOf(quantity));
                     quantityChanged = true;
                 }
-                if (quantity == 100) {
-                    createToast(getString(R.string.full_stock));
+                if (quantity >= maxInStock) {
+                    createToast(getString(R.string.full_stock, maxInStock));
                 }
                 cursor.close();
                 break;

@@ -19,7 +19,11 @@
     <item
         android:id="@+id/add_supplier"
         android:title="@string/add_supplier"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/setting"
+        android:title="@string/settings"
+        app:showAsAction="never" />
     <item
         android:id="@+id/delete_data"
         android:title="@string/delete_all_data"

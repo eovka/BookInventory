@@ -1,10 +1,13 @@
 package pl.pisze_czytam.bookinventory;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,14 +41,18 @@ public class BookCursorAdapter extends CursorAdapter {
         double priceDouble = cursor.getDouble(cursor.getColumnIndex(BookEntry.COLUMN_PRICE));
         String price = String.valueOf(priceDouble);
         if (priceDouble == 0.0) {
-            price = "priceless";
+            price = context.getResources().getString(R.string.priceless);
         } else {
-            price += " zł";
+            price += " " + context.getResources().getString(R.string.price_unit);
         }
 
         final int quantityInt = cursor.getInt(cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY));
         String quantityText = String.valueOf(quantityInt);
-        if (quantityInt <= 2) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        final int warnNumber = Integer.parseInt(sharedPreferences.getString(context.getApplicationContext().getResources().getString(R.string.warn_number_key), "2"));
+
+        if (quantityInt <= warnNumber) {
             holder.quantityLabel.setTextColor(context.getApplicationContext().getResources().getColor(R.color.colorAccent));
             holder.quantityView.setTextColor(context.getApplicationContext().getResources().getColor(R.color.colorAccent));
         } else {
@@ -67,14 +74,15 @@ public class BookCursorAdapter extends CursorAdapter {
         final String phone = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUP_PHONE));
 
         holder.saleButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("StringFormatInvalid")
             @Override
             public void onClick(View v) {
                 if (quantityInt >= 1) {
                     Uri currentBookUri = Uri.withAppendedPath(BookEntry.BOOKS_URI, id);
                     ContentValues values = new ContentValues();
                     values.put(BookEntry.COLUMN_QUANTITY, quantityInt - 1);
-                        if (quantityInt == 3) {
-                            String toastText = context.getApplicationContext().getResources().getString(R.string.two_left);
+                        if (quantityInt == warnNumber + 1) {
+                            String toastText = context.getApplicationContext().getResources().getString(R.string.books_left, warnNumber);
 
                             View toastLayout = LayoutInflater.from(mContext).inflate(R.layout.custom_toast,
                                     (ViewGroup) view.findViewById(R.id.custom_toast_container));

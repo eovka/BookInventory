@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.add_supplier:
                 startActivity(new Intent(MainActivity.this, SupplierEditor.class));
                 return true;
+            case R.id.setting:
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
             case R.id.delete_data:
                 showDeleteDialog();
                 return true;
