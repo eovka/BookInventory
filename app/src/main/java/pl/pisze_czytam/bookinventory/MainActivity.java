@@ -1,10 +1,8 @@
 package pl.pisze_czytam.bookinventory;
 
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.database.Cursor;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -38,12 +36,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.dummy_book:
-                 insertDummyBook();
-                return true;
-            case R.id.dummy_supplier:
-                insertDummySupplier();
-                return true;
             case R.id.add_books:
                 startActivity(new Intent(MainActivity.this, BookEditor.class));
                 return true;
@@ -58,34 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void insertDummyBook() {
-        // to avoid adding dummy book without supplier (it's impossible in normal app logic)
-        String[] projection = {SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_PHONE, SupplierEntry.COLUMN_ADDRESS};
-        Cursor cursor = getContentResolver().query(SupplierEntry.SUPPLIERS_URI, projection, null, null,
-                null, null);
-        if (!cursor.moveToFirst()) {
-            insertDummySupplier();
-        }
-
-        ContentValues values = new ContentValues();
-        values.put(BookEntry.COLUMN_TITLE, "Mistrz i Małgorzata");
-        values.put(BookEntry.COLUMN_AUTHOR, "Michaił Bułhakow");
-        values.put(BookEntry.COLUMN_PRICE, 59.99);
-        values.put(BookEntry.COLUMN_QUANTITY, 7);
-        values.put(BookEntry.COLUMN_SUPPLIER, "Znak");
-        values.put(BookEntry.COLUMN_SUP_PHONE, "+48126199500");
-        getContentResolver().insert(BookEntry.BOOKS_URI, values);
-    }
-
-    private void insertDummySupplier() {
-        ContentValues values = new ContentValues();
-        values.put(SupplierEntry.COLUMN_NAME, "Znak");
-        values.put(SupplierEntry.COLUMN_ADDRESS, "ul. Kościuszki 37, 30-105 Kraków");
-        values.put(SupplierEntry.COLUMN_MAIL, "znak@znak.com.pl");
-        values.put(SupplierEntry.COLUMN_PHONE, "+48126199500");
-        getContentResolver().insert(SupplierEntry.SUPPLIERS_URI, values);
     }
 
     private void showDeleteDialog() {

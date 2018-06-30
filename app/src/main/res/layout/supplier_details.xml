@@ -95,8 +95,8 @@
         </LinearLayout>
 
         <TextView
-            style="@style/DetailsCategory"
             android:id="@+id/list_title"
+            style="@style/DetailsCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/supplier_container"
@@ -110,6 +110,16 @@
             android:layout_below="@id/list_title"
             android:paddingEnd="@dimen/standard_padding"
             android:paddingStart="@dimen/standard_padding" />
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/book_list"
+            android:paddingEnd="@dimen/standard_padding"
+            android:paddingStart="@dimen/standard_padding"
+            android:text="@string/no_suppliers_books"
+            android:textStyle="bold" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_edit_supplier"

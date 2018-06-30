@@ -28,7 +28,7 @@ import pl.pisze_czytam.bookinventory.databinding.SupplierEditorBinding;
 
 public class SupplierEditor extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private SupplierEditorBinding bind;
-    Uri clickedSupplier;
+    private Uri clickedSupplier;
     private boolean supplierChanged;
 
     private View.OnTouchListener touchListener = new View.OnTouchListener() {

@@ -65,6 +65,7 @@
     <string name="no_books_subtitle">Let\'s build a bookcase by adding some books.</string>
     <string name="no_suppliers_title">No suppliers on the list.</string>
     <string name="no_suppliers_subtitle">Add some contacts to start doing business.</string>
+    <string name="no_suppliers_books">No books from this supplier. Click here and add some now.</string>
     <string name="icon_description">a bookcase</string>
     <string name="edit_book">Edit book info</string>
     <string name="discard_quit">Discard your changes and quit editing?</string>
@@ -82,10 +83,14 @@
     <string name="max_stock_default">100</string>
     <string name="max_stock_key" translatable="false">max_number</string>
     <string name="sort_books_label">Sort books</string>
-    <string name="sort_books_default">@string/sort_alphabetically_value</string>
+    <string name="sort_books_default">@string/sort_abc_value</string>
     <string name="sort_books_key" translatable="false">order_books</string>
-    <string name="sort_alphabetically_label">Alphabetically</string>
-    <string name="sort_alphabetically_value" translatable="false">alphabetically</string>
-    <string name="sort_by_time_label">By time added</string>
-    <string name="sort_by_time_value" translatable="false">by_time</string>
+    <string name="sort_abc_label">Titles A&#8212;Z</string>
+    <string name="sort_abc_value" translatable="false">alphabet</string>
+    <string name="sort_zyx_label">Titles Z&#8212;A</string>
+    <string name="sort_zyx_value" translatable="false">reverse_alphabet</string>
+    <string name="sort_old_new_label">Oldest on top</string>
+    <string name="sort_old_new_value" translatable="false">oldest_top</string>
+    <string name="sort_new_old_label">Newest on top</string>
+    <string name="sort_new_old_value" translatable="false">newest_top</string>
 </resources>

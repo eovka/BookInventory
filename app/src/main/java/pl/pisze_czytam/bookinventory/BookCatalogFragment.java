@@ -31,7 +31,7 @@ public class BookCatalogFragment extends Fragment implements LoaderManager.Loade
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.catalog_list, container, false);
 
         FloatingActionButton fab = rootView.findViewById(R.id.fab_add);
@@ -75,8 +75,12 @@ public class BookCatalogFragment extends Fragment implements LoaderManager.Loade
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String orderBy = sharedPreferences.getString(getString(R.string.sort_books_key), getString(R.string.sort_books_default));
         String sortOrder = null;
-        if (orderBy.equals(getString(R.string.sort_alphabetically_value))) {
+        if (orderBy.equals(getString(R.string.sort_abc_value))) {
             sortOrder = BookEntry.COLUMN_TITLE + " ASC";
+        } else if (orderBy.equals(getString(R.string.sort_zyx_value))) {
+            sortOrder = BookEntry.COLUMN_TITLE + " DESC";
+        } else if (orderBy.equals(getString(R.string.sort_new_old_value))) {
+            sortOrder = BookEntry.ID + " DESC";
         }
         String[] bookProjection = {BookEntry.ID, BookEntry.COLUMN_TITLE,
                 BookEntry.COLUMN_PRICE, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUP_PHONE};

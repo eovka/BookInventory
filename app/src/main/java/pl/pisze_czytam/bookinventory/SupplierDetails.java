@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -27,7 +28,7 @@ import pl.pisze_czytam.bookinventory.databinding.SupplierDetailsBinding;
 
 public class SupplierDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
     private SupplierDetailsBinding bind;
-    Uri clickedSupplier;
+    private Uri clickedSupplier;
     private TitleCursorAdapter titleCursorAdapter;
     private static final int LOADER_ID = 0;
     private static final int TITLE_LOADER_ID = 1;
@@ -42,6 +43,7 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
 
         titleCursorAdapter = new TitleCursorAdapter(getApplicationContext(), null);
         bind.bookList.setAdapter(titleCursorAdapter);
+        bind.bookList.setEmptyView(bind.emptyView);
         getSupportLoaderManager().initLoader(TITLE_LOADER_ID, null, this);
 
         bind.bookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,6 +59,7 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
         bind.fabEditSupplier.setOnClickListener(this);
         bind.supplierMail.setOnClickListener(this);
         bind.supplierPhone.setOnClickListener(this);
+        bind.emptyView.setOnClickListener(this);
     }
 
     @Override
@@ -77,7 +80,7 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                goToEditor();
+                goToSupEditor();
                 break;
             case R.id.action_delete:
                 showDeleteDialog();
@@ -113,7 +116,7 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         switch (loader.getId()) {
             case LOADER_ID:
                 if (cursor.moveToFirst()) {
@@ -143,7 +146,7 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         switch (loader.getId()) {
             case LOADER_ID:
                 bind.supplierName.setText(null);
@@ -159,18 +162,17 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
 
     @Override
     public void onClick(View v) {
-        String[] projection = {SupplierEntry.ID, SupplierEntry.COLUMN_MAIL, SupplierEntry.COLUMN_PHONE};
-        Cursor cursor = getContentResolver().query(clickedSupplier, projection, null,
-                null, null, null);
-        cursor.moveToFirst();
         switch (v.getId()) {
             case R.id.fab_edit_supplier:
-                goToEditor();
-                cursor.close();
+                goToSupEditor();
                 break;
             case R.id.supplier_mail:
-                String mail = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_MAIL));
-                cursor.close();
+                String[] mailProjection = {SupplierEntry.ID, SupplierEntry.COLUMN_MAIL};
+                Cursor mailCursor = getContentResolver().query(clickedSupplier, mailProjection, null,
+                        null, null, null);
+                mailCursor.moveToFirst();
+                String mail = mailCursor.getString(mailCursor.getColumnIndex(SupplierEntry.COLUMN_MAIL));
+                mailCursor.close();
                 if (TextUtils.isEmpty(mail)) {
                     createToast(getString(R.string.cannot_email));
                 } else {
@@ -183,16 +185,22 @@ public class SupplierDetails extends AppCompatActivity implements LoaderManager.
                 }
                 break;
             case R.id.supplier_phone:
-                String phone = cursor.getString(cursor.getColumnIndex(SupplierEntry.COLUMN_PHONE));
-                cursor.close();
+                String[] phoneProjection = {SupplierEntry.ID, SupplierEntry.COLUMN_PHONE};
+                Cursor phoneCursor = getContentResolver().query(clickedSupplier, phoneProjection, null,
+                        null, null, null);
+                phoneCursor.moveToFirst();
+                String phone = phoneCursor.getString(phoneCursor.getColumnIndex(SupplierEntry.COLUMN_PHONE));
+                phoneCursor.close();
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL);
                 dialIntent.setData(Uri.parse("tel:" + phone));
                 startActivity(dialIntent);
                 break;
+            case R.id.empty_view:
+                startActivity(new Intent(SupplierDetails.this, BookEditor.class));
         }
     }
 
-    private void goToEditor() {
+    private void goToSupEditor() {
         Intent editorIntent = new Intent(SupplierDetails.this, SupplierEditor.class);
         editorIntent.setData(clickedSupplier);
         startActivity(editorIntent);

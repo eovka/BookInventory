@@ -31,7 +31,7 @@ import pl.pisze_czytam.bookinventory.databinding.BookDetailsBinding;
 public class BookDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         View.OnClickListener {
     private BookDetailsBinding bind;
-    Uri clickedBook;
+    private Uri clickedBook;
     private static final int LOADER_ID = 0;
     private boolean quantityChanged;
 
@@ -126,6 +126,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                 null, null, null);
         cursor.moveToFirst();
         int quantity = cursor.getInt(cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY));
+        cursor.close();
         switch (v.getId()) {
             case R.id.minus_button:
                 if (quantity >= 1) {
@@ -135,10 +136,14 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                     getContentResolver().update(clickedBook, values, null, null);
                     bind.bookQuantity.setText(String.valueOf(quantity));
                     quantityChanged = true;
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    int warnNumber = Integer.parseInt(sharedPreferences.getString(getApplicationContext().getResources().getString(R.string.warn_number_key), "2"));
+                    if (quantity == warnNumber) {
+                        createToast(getApplicationContext().getResources().getString(R.string.books_left, warnNumber));
+                    }
                 } else {
                     createToast(getString(R.string.no_books));
                 }
-                cursor.close();
                 break;
             case R.id.plus_button:
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -154,18 +159,14 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                 if (quantity >= maxInStock) {
                     createToast(getString(R.string.full_stock, maxInStock));
                 }
-                cursor.close();
                 break;
             case R.id.call_button:
                 String phone = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUP_PHONE));
-                cursor.close();
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL);
                 dialIntent.setData(Uri.parse("tel:" + phone));
                 startActivity(dialIntent);
                 break;
             case R.id.fab_edit_book:
-                // close cursor - it's not used here, but open after any click.
-                cursor.close();
                 checkIfChanged();
                 goToEditor();
                 break;

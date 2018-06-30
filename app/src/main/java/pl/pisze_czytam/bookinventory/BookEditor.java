@@ -1,6 +1,7 @@
 package pl.pisze_czytam.bookinventory;
 
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -41,7 +42,7 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
     private String telephone = BookEntry.PHONE_UNKNOWN;
     private double bookPrice = BookEntry.PRICE_DEFAULT;
     private int bookQuantity = BookEntry.NUMBER_DEFAULT;
-    Uri clickedBook;
+    private Uri clickedBook;
     private static final int LOADER_ID = 1;
     private boolean bookChanged;
 
@@ -79,7 +80,7 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
         bind.spinnerSuppliers.setOnTouchListener(touchListener);
     }
 
-    public void setupSpinner() {
+    private void setupSpinner() {
         String[] projection = {SupplierEntry.COLUMN_NAME, SupplierEntry.COLUMN_PHONE};
         Cursor suppliersCursor = getContentResolver().query(SupplierEntry.SUPPLIERS_URI, projection,
                 null, null, SupplierEntry.COLUMN_NAME + " ASC");
@@ -191,8 +192,8 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int maxInStock = Integer.parseInt(sharedPreferences.getString(getString(R.string.max_stock_key), "100"));
-        if (Integer.parseInt(quantity) > maxInStock) {
-            createToast(getString(R.string.book_limit, maxInStock));
+        if (!TextUtils.isEmpty(quantity) && Integer.parseInt(quantity) > maxInStock) {
+            createToast(getString(R.string.book_limit, maxInStock, maxInStock));
             bookQuantity = maxInStock;
         }
         ContentValues contentValues = new ContentValues();

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sorting_labels">
-        <item>@string/sort_alphabetically_label</item>
-        <item>@string/sort_by_time_label</item>
+        <item>@string/sort_abc_label</item>
+        <item>@string/sort_zyx_label</item>
+        <item>@string/sort_old_new_label</item>
+        <item>@string/sort_new_old_label</item>
     </string-array>
-    <string-array name="sorting_keys">
-        <item>@string/sort_alphabetically_value</item>
-        <item>@string/sort_by_time_value</item>
+    <string-array name="sorting_values">
+        <item>@string/sort_abc_value</item>
+        <item>@string/sort_zyx_value</item>
+        <item>@string/sort_old_new_value</item>
+        <item>@string/sort_new_old_value</item>
     </string-array>
     <string-array name="preferences_keys">
         <item>@string/warn_number_key</item>

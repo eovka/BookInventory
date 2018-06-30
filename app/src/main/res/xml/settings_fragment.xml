@@ -18,7 +18,7 @@
     <ListPreference
         android:defaultValue="@string/sort_books_default"
         android:entries="@array/sorting_labels"
-        android:entryValues="@array/sorting_keys"
+        android:entryValues="@array/sorting_values"
         android:key="@string/sort_books_key"
         android:title="@string/sort_books_label" />
 

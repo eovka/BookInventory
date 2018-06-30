@@ -3,8 +3,6 @@ package pl.pisze_czytam.bookinventory.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.speech.tts.TextToSpeech;
-
 import static pl.pisze_czytam.bookinventory.data.BookstoreContract.*;
 
 public class BookstoreDbHelper extends SQLiteOpenHelper {
