@@ -46,6 +46,7 @@ public class SupplierEditor extends AppCompatActivity implements LoaderManager.L
 
         clickedSupplier = getIntent().getData();
         if (clickedSupplier != null) {
+            setTitle(R.string.edit_supplier);
             getSupportLoaderManager().initLoader(0, null, this);
         }
 

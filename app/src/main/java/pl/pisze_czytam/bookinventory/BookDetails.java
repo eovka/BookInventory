@@ -126,6 +126,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                 null, null, null);
         cursor.moveToFirst();
         int quantity = cursor.getInt(cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY));
+        String phone = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUP_PHONE));
         cursor.close();
         switch (v.getId()) {
             case R.id.minus_button:
@@ -161,7 +162,7 @@ public class BookDetails extends AppCompatActivity implements LoaderManager.Load
                 }
                 break;
             case R.id.call_button:
-                String phone = cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_SUP_PHONE));
+
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL);
                 dialIntent.setData(Uri.parse("tel:" + phone));
                 startActivity(dialIntent);

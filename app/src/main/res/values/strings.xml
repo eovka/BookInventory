@@ -40,6 +40,7 @@
     <string name="supplier_overview">Supplier overview</string>
     <string name="no_suppliers">No suppliers on the list. Add some first.</string>
     <string name="add_new_sup">Add a new supplier</string>
+    <string name="edit_supplier">Edit a supplier</string>
     <string name="dummy_name">Supplier\'s name</string>
     <string name="address">Address</string>
     <string name="address_unknown">Address unknown</string>
@@ -67,7 +68,7 @@
     <string name="no_suppliers_subtitle">Add some contacts to start doing business.</string>
     <string name="no_suppliers_books">No books from this supplier. Click here and add some now.</string>
     <string name="icon_description">a bookcase</string>
-    <string name="edit_book">Edit book info</string>
+    <string name="edit_book">Edit a book</string>
     <string name="discard_quit">Discard your changes and quit editing?</string>
     <string name="keep_editing">Keep editing</string>
     <string name="discard">Discard</string>

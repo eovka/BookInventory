@@ -1,7 +1,6 @@
 package pl.pisze_czytam.bookinventory;
 
 import android.annotation.SuppressLint;
-import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -62,6 +61,7 @@ public class BookEditor extends AppCompatActivity implements LoaderManager.Loade
         clickedBook = getIntent().getData();
         if (clickedBook != null) {
             setTitle(R.string.edit_book);
+            bind.buttonAdd.setVisibility(View.GONE);
             getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         }
         setupSpinner();
